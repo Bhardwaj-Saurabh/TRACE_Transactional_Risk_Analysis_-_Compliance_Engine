@@ -17,12 +17,49 @@ This module contains the foundational components for SAR processing:
 """
 
 import json
+import math
 import pandas as pd
+import re
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Any, Literal
-from pydantic import BaseModel, Field, field_validator
+from typing import Dict, List, Optional, Any, Literal, Union
+from pydantic import BaseModel, Field, field_validator, model_validator
 import uuid
 import os
+
+
+# ===== HELPER FUNCTIONS =====
+
+def is_nan(value: Any) -> bool:
+    """Check if a value is NaN (handles pandas NaN and float nan)"""
+    if value is None:
+        return True
+    if isinstance(value, float) and math.isnan(value):
+        return True
+    try:
+        import pandas as pd
+        if pd.isna(value):
+            return True
+    except (ImportError, TypeError):
+        pass
+    return False
+
+
+def validate_date_format(value: str, field_name: str) -> str:
+    """Validate that a date string is in YYYY-MM-DD format"""
+    if not isinstance(value, str):
+        raise ValueError(f"{field_name} must be a string in YYYY-MM-DD format")
+
+    date_pattern = r'^\d{4}-\d{2}-\d{2}$'
+    if not re.match(date_pattern, value):
+        raise ValueError(f"{field_name} must be in YYYY-MM-DD format, got: {value}")
+
+    # Validate it's a real date
+    try:
+        datetime.strptime(value, '%Y-%m-%d')
+    except ValueError:
+        raise ValueError(f"{field_name} is not a valid date: {value}")
+
+    return value
 
 
 # ===== PYDANTIC SCHEMAS =====
@@ -32,13 +69,51 @@ class CustomerData(BaseModel):
     customer_id: str = Field(..., description="Unique customer identifier like CUST_0001")
     name: str = Field(..., description="Full customer name")
     date_of_birth: str = Field(..., description="Date in YYYY-MM-DD format")
-    ssn_last_4: str = Field(..., description="Last 4 digits of SSN")
+    ssn_last_4: Union[str, int] = Field(..., description="Last 4 digits of SSN")
     address: str = Field(..., description="Full address")
     customer_since: str = Field(..., description="Date in YYYY-MM-DD format")
     risk_rating: Literal['Low', 'Medium', 'High'] = Field(..., description="Risk assessment level")
     phone: Optional[str] = Field(None, description="Phone number")
     occupation: Optional[str] = Field(None, description="Job title")
     annual_income: Optional[int] = Field(None, description="Yearly income")
+
+    @field_validator('ssn_last_4', mode='before')
+    @classmethod
+    def coerce_ssn_to_str(cls, v):
+        """Convert ssn_last_4 to string (handles int from CSV)"""
+        if is_nan(v):
+            raise ValueError("ssn_last_4 cannot be empty")
+        return str(v)
+
+    @field_validator('date_of_birth')
+    @classmethod
+    def validate_dob_format(cls, v):
+        """Validate date_of_birth is in YYYY-MM-DD format"""
+        return validate_date_format(v, 'date_of_birth')
+
+    @field_validator('customer_since')
+    @classmethod
+    def validate_customer_since_format(cls, v):
+        """Validate customer_since is in YYYY-MM-DD format"""
+        return validate_date_format(v, 'customer_since')
+
+    @field_validator('phone', 'occupation', mode='before')
+    @classmethod
+    def handle_nan_optional_str(cls, v):
+        """Convert NaN values to None for optional string fields"""
+        if is_nan(v):
+            return None
+        return v
+
+    @field_validator('annual_income', mode='before')
+    @classmethod
+    def handle_nan_optional_int(cls, v):
+        """Convert NaN values to None for optional int fields"""
+        if is_nan(v):
+            return None
+        if isinstance(v, float):
+            return int(v)
+        return v
 
 
 class AccountData(BaseModel):
@@ -51,6 +126,12 @@ class AccountData(BaseModel):
     average_monthly_balance: float = Field(..., description="Average monthly balance")
     status: str = Field(..., description="Account status e.g. Active, Closed, Suspended")
 
+    @field_validator('opening_date')
+    @classmethod
+    def validate_opening_date_format(cls, v):
+        """Validate opening_date is in YYYY-MM-DD format"""
+        return validate_date_format(v, 'opening_date')
+
 
 class TransactionData(BaseModel):
     """Transaction information schema with validation"""
@@ -58,11 +139,33 @@ class TransactionData(BaseModel):
     account_id: str = Field(..., description="Associated account identifier")
     transaction_date: str = Field(..., description="Date in YYYY-MM-DD format")
     transaction_type: str = Field(..., description="Transaction type e.g. Cash_Deposit, Wire_Transfer")
-    amount: float = Field(..., description="Transaction amount, negative for withdrawals")
+    amount: float = Field(..., ge=-10000000, le=10000000, description="Transaction amount, negative for withdrawals")
     description: str = Field(..., description="Transaction description")
     counterparty: Optional[str] = Field(None, description="Other party in transaction")
     location: Optional[str] = Field(None, description="Transaction location or branch")
     method: str = Field(..., description="Transaction method e.g. Wire, ACH, ATM, Teller, Cash")
+
+    @field_validator('transaction_date')
+    @classmethod
+    def validate_transaction_date_format(cls, v):
+        """Validate transaction_date is in YYYY-MM-DD format"""
+        return validate_date_format(v, 'transaction_date')
+
+    @field_validator('counterparty', 'location', mode='before')
+    @classmethod
+    def handle_nan_optional_fields(cls, v):
+        """Convert NaN values to None for optional string fields"""
+        if is_nan(v):
+            return None
+        return v
+
+    @field_validator('amount')
+    @classmethod
+    def validate_amount_range(cls, v):
+        """Validate transaction amount is within expected range"""
+        if v < -10000000 or v > 10000000:
+            raise ValueError(f"Transaction amount must be between -10,000,000 and 10,000,000, got: {v}")
+        return v
 
 
 class CaseData(BaseModel):
@@ -83,12 +186,26 @@ class CaseData(BaseModel):
 
 
 class RiskAnalystOutput(BaseModel):
-    """Risk Analyst agent structured output"""
+    """Risk Analyst agent structured output with Chain-of-Thought reasoning"""
     classification: Literal['Structuring', 'Sanctions', 'Fraud', 'Money_Laundering', 'Other'] = Field(..., description="Risk classification")
     confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence between 0.0 and 1.0")
-    reasoning: str = Field(..., max_length=500, description="Step-by-step analysis reasoning")
+    reasoning: str = Field(..., max_length=2000, description="Step-by-step Chain-of-Thought analysis reasoning with explicit steps")
     key_indicators: List[str] = Field(..., description="List of suspicious indicators found")
     risk_level: Literal['Low', 'Medium', 'High', 'Critical'] = Field(..., description="Risk assessment level")
+
+    @field_validator('reasoning')
+    @classmethod
+    def validate_chain_of_thought_reasoning(cls, v):
+        """Validate that reasoning contains explicit step-by-step Chain-of-Thought analysis"""
+        if not v or len(v.strip()) < 50:
+            raise ValueError("Reasoning must contain substantive Chain-of-Thought analysis")
+        return v
+
+    def has_explicit_steps(self) -> bool:
+        """Check if reasoning contains explicit numbered steps"""
+        step_patterns = ['Step 1', 'Step 2', 'Step 3', 'Step 4', 'Step 5',
+                        'step 1', 'step 2', 'step 3', 'step 4', 'step 5']
+        return any(pattern in self.reasoning for pattern in step_patterns)
 
 
 class ComplianceOfficerOutput(BaseModel):

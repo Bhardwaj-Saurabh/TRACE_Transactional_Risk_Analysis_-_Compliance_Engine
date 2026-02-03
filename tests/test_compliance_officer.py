@@ -62,7 +62,7 @@ class TestComplianceOfficerAgent:
         mock_response.choices = [Mock()]
         mock_response.choices[0].message.content = '''```json
 {
-    "narrative": "Customer John Doe (CUST_001) conducted multiple cash deposits totaling $29,500 over three consecutive days. The deposits were structured to avoid the $10,000 CTR threshold, with amounts of $9,900, $9,800, and $9,800. This pattern suggests possible structuring to evade regulatory reporting requirements under 31 USC 5324.",
+    "narrative": "Customer John Doe (CUST_001) conducted multiple cash deposits totaling $29,500 at branch locations over three consecutive days. The deposits were structured via cash to avoid the $10,000 CTR threshold, with amounts of $9,900, $9,800, and $9,800. This pattern suggests possible structuring to evade regulatory reporting requirements.",
     "narrative_reasoning": "Focused on quantitative details and temporal pattern to establish structuring case. Used regulatory terminology and specific statute reference.",
     "regulatory_citations": ["31 USC 5324 (Structuring)", "31 CFR 1020.320 (SAR Filing)", "FinCEN SAR Instructions"],
     "completeness_check": true
@@ -125,11 +125,11 @@ class TestComplianceOfficerAgent:
             data_sources={"test": "data"}
         )
         
-        # Create risk analysis input
+        # Create risk analysis input with Chain-of-Thought reasoning
         risk_analysis = RiskAnalystOutput(
             classification="Structuring",
             confidence_score=0.85,
-            reasoning="Multiple transactions under threshold",
+            reasoning="Step 1: Reviewed customer profile. Step 2: Identified multiple cash deposits under $10,000. Step 3: Pattern matches BSA structuring. Step 4: High confidence. Step 5: Classified as Structuring.",
             key_indicators=["threshold avoidance", "repeated amounts"],
             risk_level="High"
         )
@@ -208,11 +208,11 @@ class TestComplianceOfficerAgent:
         risk_analysis = RiskAnalystOutput(
             classification="Other",
             confidence_score=0.5,
-            reasoning="Test analysis",
+            reasoning="Step 1: Reviewed test data. Step 2: No clear patterns. Step 3: No regulatory violations. Step 4: Low risk assessed. Step 5: Classified as Other for testing purposes.",
             key_indicators=["test"],
             risk_level="Low"
         )
-        
+
         # Should raise ValueError for word count violation
         with pytest.raises(ValueError, match="exceeds 120 word limit"):
             agent.generate_compliance_narrative(case, risk_analysis)
@@ -265,11 +265,11 @@ class TestComplianceOfficerAgent:
         risk_analysis = RiskAnalystOutput(
             classification="Other",
             confidence_score=0.3,
-            reasoning="Error test",
+            reasoning="Step 1: Reviewed error test data. Step 2: No patterns identified. Step 3: No regulatory concerns. Step 4: Low confidence. Step 5: Classified as Other for error testing.",
             key_indicators=["error"],
             risk_level="Low"
         )
-        
+
         # Should raise ValueError for invalid JSON
         with pytest.raises(ValueError, match="Failed to parse Compliance Officer JSON output"):
             agent.generate_compliance_narrative(case, risk_analysis)
@@ -430,11 +430,11 @@ This completes the analysis.'''
         risk_analysis = RiskAnalystOutput(
             classification="Other",
             confidence_score=0.5,
-            reasoning="API test",
+            reasoning="Step 1: Reviewed API test data. Step 2: No suspicious patterns. Step 3: No regulatory mapping needed. Step 4: Low risk quantified. Step 5: Classified as Other for API testing.",
             key_indicators=["test"],
             risk_level="Low"
         )
-        
+
         agent.generate_compliance_narrative(case, risk_analysis)
         
         # Verify API call parameters
@@ -449,3 +449,584 @@ This completes the analysis.'''
         # Cleanup
         if os.path.exists("test_api_compliance.jsonl"):
             os.remove("test_api_compliance.jsonl")
+
+
+class TestFiveWsNarrativeValidation:
+    """Test Five W's (who/what/when/where/why) narrative validation"""
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_extract_locations_from_transactions(self):
+        """Test location extraction from transactions"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        transactions = [
+            TransactionData(
+                transaction_id="TXN_001",
+                account_id="ACC_001",
+                transaction_date="2025-01-01",
+                transaction_type="Cash_Deposit",
+                amount=9900.0,
+                description="Cash deposit",
+                method="Cash",
+                location="Branch_001"
+            ),
+            TransactionData(
+                transaction_id="TXN_002",
+                account_id="ACC_001",
+                transaction_date="2025-01-02",
+                transaction_type="Wire_Transfer",
+                amount=15000.0,
+                description="Wire transfer",
+                method="Wire",
+                location="Online"
+            )
+        ]
+
+        locations = agent._extract_locations_from_transactions(transactions)
+
+        assert "Branch_001" in locations
+        assert "Online" in locations
+        assert "via Cash" in locations
+        assert "via Wire" in locations
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_extract_locations_empty_transactions(self):
+        """Test location extraction with no location data"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        transactions = [
+            TransactionData(
+                transaction_id="TXN_001",
+                account_id="ACC_001",
+                transaction_date="2025-01-01",
+                transaction_type="Cash_Deposit",
+                amount=9900.0,
+                description="Cash deposit",
+                method="Cash"
+            )
+        ]
+
+        locations = agent._extract_locations_from_transactions(transactions)
+        assert "via Cash" in locations
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_who_element(self):
+        """Test WHO element detection in narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative with customer name
+        narrative_with_name = "Customer John Doe conducted multiple suspicious transactions."
+        assert agent._check_who_element(narrative_with_name, None) == True
+
+        # Narrative with customer ID
+        narrative_with_id = "Subject CUST_001 engaged in structuring activity."
+        assert agent._check_who_element(narrative_with_id, None) == True
+
+        # Narrative without identification
+        narrative_without_who = "Multiple deposits were made."
+        assert agent._check_who_element(narrative_without_who, None) == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_what_element(self):
+        """Test WHAT element detection in narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative with activity description
+        narrative_with_what = "The customer made multiple cash deposits totaling $29,500."
+        assert agent._check_what_element(narrative_with_what.lower()) == True
+
+        # Narrative with structuring mention
+        narrative_structuring = "The pattern suggests structuring to evade reporting."
+        assert agent._check_what_element(narrative_structuring.lower()) == True
+
+        # Narrative without activity
+        narrative_without_what = "The individual was observed."
+        assert agent._check_what_element(narrative_without_what.lower()) == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_when_element(self):
+        """Test WHEN element detection in narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative with date
+        narrative_with_date = "On 2025-01-15, the customer made a deposit."
+        assert agent._check_when_element(narrative_with_date) == True
+
+        # Narrative with time period
+        narrative_with_period = "Over three consecutive days, deposits were made."
+        assert agent._check_when_element(narrative_with_period) == True
+
+        # Narrative without temporal info
+        narrative_without_when = "Deposits were made to the account."
+        assert agent._check_when_element(narrative_without_when) == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_where_element(self):
+        """Test WHERE element detection in narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative with branch location
+        narrative_with_branch = "Deposits were made at branch locations."
+        assert agent._check_where_element(narrative_with_branch.lower()) == True
+
+        # Narrative with method
+        narrative_with_method = "Funds were transferred via wire to offshore accounts."
+        assert agent._check_where_element(narrative_with_method.lower()) == True
+
+        # Narrative with online
+        narrative_online = "Transactions were conducted online through the banking portal."
+        assert agent._check_where_element(narrative_online.lower()) == True
+
+        # Narrative without location
+        narrative_without_where = "Money was moved repeatedly."
+        assert agent._check_where_element(narrative_without_where.lower()) == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_why_element(self):
+        """Test WHY element detection in narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative with suspicious explanation
+        narrative_with_why = "This activity is suspicious as it appears to evade the $10,000 CTR threshold."
+        assert agent._check_why_element(narrative_with_why.lower()) == True
+
+        # Narrative with structuring pattern
+        narrative_structuring = "The pattern is consistent with structuring violations."
+        assert agent._check_why_element(narrative_structuring.lower()) == True
+
+        # Narrative without explanation
+        narrative_without_why = "Deposits were made over several days."
+        assert agent._check_why_element(narrative_without_why.lower()) == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_validate_narrative_with_all_five_ws(self):
+        """Test narrative validation with all Five W's present"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        complete_narrative = (
+            "Customer John Doe (CUST_001) conducted multiple cash deposits totaling $29,500 "
+            "at branch locations over three consecutive days (2025-01-01 to 2025-01-03). "
+            "This pattern is suspicious as the amounts appear structured to evade the $10,000 CTR threshold."
+        )
+
+        validation = agent._validate_narrative_compliance(complete_narrative)
+
+        assert validation["five_ws"]["who"] == True
+        assert validation["five_ws"]["what"] == True
+        assert validation["five_ws"]["when"] == True
+        assert validation["five_ws"]["where"] == True
+        assert validation["five_ws"]["why"] == True
+        assert validation["five_ws_complete"] == True
+        assert len(validation["missing_elements"]) == 0
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_validate_narrative_missing_where(self):
+        """Test narrative validation detects missing WHERE element"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        narrative_missing_where = (
+            "Customer John Doe (CUST_001) made cash deposits totaling $29,500 "
+            "over three consecutive days (2025-01-01 to 2025-01-03). "
+            "This pattern appears to evade the $10,000 CTR threshold."
+        )
+
+        validation = agent._validate_narrative_compliance(narrative_missing_where)
+
+        assert validation["five_ws"]["who"] == True
+        assert validation["five_ws"]["what"] == True
+        assert validation["five_ws"]["when"] == True
+        assert validation["five_ws"]["where"] == False  # Missing WHERE
+        assert validation["five_ws"]["why"] == True
+        assert validation["five_ws_complete"] == False
+        assert "where" in validation["missing_elements"]
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_system_prompt_contains_five_ws(self):
+        """Test system prompt includes Five W's requirements"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+        prompt = agent.system_prompt
+
+        # Check for Five W's framework
+        assert "WHO" in prompt
+        assert "WHAT" in prompt
+        assert "WHEN" in prompt
+        assert "WHERE" in prompt
+        assert "WHY" in prompt
+
+        # Check for specific WHERE requirements
+        assert "location" in prompt.lower() or "Location" in prompt
+        assert "channel" in prompt.lower() or "Channel" in prompt
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_user_prompt_includes_location_context(self):
+        """Test user prompt includes location/channel information"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        customer = CustomerData(
+            customer_id="CUST_001",
+            name="Test Customer",
+            date_of_birth="1980-01-01",
+            ssn_last_4="1234",
+            address="123 Test St",
+            customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+
+        case = CaseData(
+            case_id="CASE_001",
+            customer=customer,
+            accounts=[],
+            transactions=[
+                TransactionData(
+                    transaction_id="TXN_001",
+                    account_id="ACC_001",
+                    transaction_date="2025-01-01",
+                    transaction_type="Cash_Deposit",
+                    amount=9900.0,
+                    description="Cash deposit",
+                    method="Cash",
+                    location="Branch_Downtown"
+                )
+            ],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "data"}
+        )
+
+        risk_analysis = RiskAnalystOutput(
+            classification="Structuring",
+            confidence_score=0.85,
+            reasoning="Step 1: Reviewed customer profile. Step 2: Identified cash deposits under threshold. Step 3: Pattern matches structuring. Step 4: High confidence. Step 5: Classified as Structuring.",
+            key_indicators=["threshold avoidance"],
+            risk_level="High"
+        )
+
+        prompt = agent._build_user_prompt(case, risk_analysis)
+
+        # Check for Five W's sections in prompt
+        assert "WHO" in prompt
+        assert "WHAT" in prompt
+        assert "WHEN" in prompt
+        assert "WHERE" in prompt
+        assert "WHY" in prompt
+
+        # Check for location information
+        assert "Branch_Downtown" in prompt or "via Cash" in prompt
+        assert "Five W's" in prompt
+
+
+class TestPreFinalizationValidation:
+    """Test deterministic pre-finalization validation gate"""
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_dollar_amounts_valid(self):
+        """Test dollar amount detection with valid amounts"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Various valid dollar amount formats
+        assert agent._check_dollar_amounts("Total deposits of $29,500") == True
+        assert agent._check_dollar_amounts("Amount: $9,900.00") == True
+        assert agent._check_dollar_amounts("Transactions totaling $10000") == True
+        assert agent._check_dollar_amounts("USD 15,000 transferred") == True
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_check_dollar_amounts_invalid(self):
+        """Test dollar amount detection fails when no amounts present"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        assert agent._check_dollar_amounts("Multiple large deposits were made") == False
+        assert agent._check_dollar_amounts("Suspicious activity detected") == False
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_validate_regulatory_citations_valid(self):
+        """Test regulatory citation validation with valid citations"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        citations = ["31 CFR 1020.320", "31 USC 5324", "FinCEN SAR Instructions"]
+        result = agent._validate_regulatory_citations(citations)
+
+        assert result["is_valid"] == True
+        assert result["has_citations"] == True
+        assert len(result["valid_citations"]) >= 1
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_validate_regulatory_citations_empty(self):
+        """Test regulatory citation validation fails with empty list"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        result = agent._validate_regulatory_citations([])
+
+        assert result["is_valid"] == False
+        assert result["has_citations"] == False
+        assert result["error_message"] == "No regulatory citations provided"
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_validate_regulatory_citations_unrecognized(self):
+        """Test regulatory citation validation with unrecognized citations"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        citations = ["Made up regulation 123", "Fake law XYZ"]
+        result = agent._validate_regulatory_citations(citations)
+
+        assert result["is_valid"] == False
+        assert result["has_citations"] == True
+        assert len(result["unrecognized_citations"]) == 2
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_pre_finalization_validation_passes(self):
+        """Test pre-finalization validation with complete narrative"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        complete_narrative = (
+            "Customer John Doe (CUST_001) conducted multiple cash deposits totaling $29,500 "
+            "at branch locations over three consecutive days (2025-01-01 to 2025-01-03). "
+            "This pattern is suspicious as the amounts appear structured to evade the $10,000 CTR threshold."
+        )
+
+        customer = CustomerData(
+            customer_id="CUST_001", name="John Doe",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Test St", customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+        case = CaseData(
+            case_id="CASE_001", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_001", account_id="ACC_001",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=9900.0, description="Cash deposit", method="Cash"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "data"}
+        )
+
+        citations = ["31 CFR 1020.320", "31 USC 5324"]
+
+        result = agent._pre_finalization_validation(
+            narrative=complete_narrative,
+            citations=citations,
+            case_data=case,
+            model_completeness_check=True
+        )
+
+        assert result["is_valid"] == True
+        assert result["can_finalize"] == True
+        assert result["word_count_valid"] == True
+        assert result["five_ws_complete"] == True
+        assert result["has_dollar_amounts"] == True
+        assert result["citations_valid"] == True
+        assert len(result["failed_checks"]) == 0
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_pre_finalization_validation_blocks_missing_elements(self):
+        """Test pre-finalization validation blocks narrative with missing elements"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        # Narrative missing WHERE and dollar amounts
+        incomplete_narrative = (
+            "Customer John Doe made deposits over several days. "
+            "This pattern appears suspicious."
+        )
+
+        customer = CustomerData(
+            customer_id="CUST_001", name="John Doe",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Test St", customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+        case = CaseData(
+            case_id="CASE_001", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_001", account_id="ACC_001",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=9900.0, description="Cash deposit", method="Cash"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "data"}
+        )
+
+        citations = ["31 CFR 1020.320"]
+
+        result = agent._pre_finalization_validation(
+            narrative=incomplete_narrative,
+            citations=citations,
+            case_data=case,
+            model_completeness_check=True  # Model says complete but it's not
+        )
+
+        assert result["is_valid"] == False
+        assert result["can_finalize"] == False
+        assert "dollar_amounts" in result["failed_checks"]
+        assert result.get("model_discrepancy") == True  # Model said complete but validation failed
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_pre_finalization_validation_blocks_empty_citations(self):
+        """Test pre-finalization validation blocks narrative with empty citations"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        narrative = (
+            "Customer John Doe (CUST_001) conducted cash deposits totaling $29,500 "
+            "at branch locations over three consecutive days. "
+            "This pattern is suspicious as it evades the CTR threshold."
+        )
+
+        result = agent._pre_finalization_validation(
+            narrative=narrative,
+            citations=[],  # Empty citations
+            case_data=None,
+            model_completeness_check=True
+        )
+
+        assert result["is_valid"] == False
+        assert result["can_finalize"] == False
+        assert "citations" in result["failed_checks"]
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_narrative_validation_error_exception(self):
+        """Test NarrativeValidationError contains proper details"""
+        try:
+            from src.compliance_officer_agent import NarrativeValidationError
+        except ImportError:
+            from compliance_officer_agent import NarrativeValidationError
+
+        validation_result = {
+            "is_valid": False,
+            "can_finalize": False,
+            "missing_elements": ["where", "when"],
+            "failed_checks": ["five_ws", "dollar_amounts"],
+            "error_messages": ["Missing where element", "No dollar amounts"]
+        }
+
+        error = NarrativeValidationError("Validation failed", validation_result)
+
+        assert error.missing_elements == ["where", "when"]
+        assert error.failed_checks == ["five_ws", "dollar_amounts"]
+        assert "Missing narrative elements: where, when" in error.get_failure_summary()
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_generate_narrative_with_validation_success(self):
+        """Test generate_compliance_narrative succeeds with valid response"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        mock_response.choices[0].message.content = '''```json
+{
+    "narrative": "Customer John Doe (CUST_001) conducted multiple cash deposits totaling $29,500 at branch locations over three consecutive days (2025-01-01 to 2025-01-03). This pattern is suspicious as the amounts appear structured to evade the $10,000 CTR threshold under 31 USC 5324.",
+    "narrative_reasoning": "Focused on Five W's: WHO (John Doe), WHAT (cash deposits), WHEN (three days), WHERE (branch), WHY (structuring).",
+    "regulatory_citations": ["31 CFR 1020.320", "31 USC 5324", "FinCEN SAR Instructions"],
+    "completeness_check": true
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_validation_success.jsonl")
+        agent = ComplianceOfficerAgent(mock_client, logger)
+
+        customer = CustomerData(
+            customer_id="CUST_001", name="John Doe",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Test St", customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+        case = CaseData(
+            case_id="CASE_001", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_001", account_id="ACC_001",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=9900.0, description="Cash deposit", method="Cash",
+                location="Branch_001"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "data"}
+        )
+        risk_analysis = RiskAnalystOutput(
+            classification="Structuring", confidence_score=0.85,
+            reasoning="Step 1: Data reviewed. Step 2: Patterns found. Step 3: BSA mapping. Step 4: High risk. Step 5: Structuring.",
+            key_indicators=["threshold_avoidance"],
+            risk_level="High"
+        )
+
+        result = agent.generate_compliance_narrative(case, risk_analysis)
+
+        assert result is not None
+        assert "John Doe" in result.narrative
+        assert "$29,500" in result.narrative
+        assert result.completeness_check == True
+
+        if os.path.exists("test_validation_success.jsonl"):
+            os.remove("test_validation_success.jsonl")
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_generate_narrative_raises_on_validation_failure(self):
+        """Test generate_compliance_narrative raises NarrativeValidationError when validation fails"""
+        try:
+            from src.compliance_officer_agent import NarrativeValidationError
+        except ImportError:
+            from compliance_officer_agent import NarrativeValidationError
+
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        # Response missing dollar amounts and WHERE element
+        mock_response.choices[0].message.content = '''```json
+{
+    "narrative": "Customer made some deposits. This is suspicious.",
+    "narrative_reasoning": "Brief narrative.",
+    "regulatory_citations": [],
+    "completeness_check": false
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_validation_failure.jsonl")
+        agent = ComplianceOfficerAgent(mock_client, logger)
+
+        customer = CustomerData(
+            customer_id="CUST_001", name="Test Customer",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Test St", customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+        case = CaseData(
+            case_id="CASE_001", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_001", account_id="ACC_001",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=9900.0, description="Cash deposit", method="Cash"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "data"}
+        )
+        risk_analysis = RiskAnalystOutput(
+            classification="Structuring", confidence_score=0.85,
+            reasoning="Step 1: Data reviewed. Step 2: Patterns found. Step 3: BSA. Step 4: Risk. Step 5: Done.",
+            key_indicators=["test"],
+            risk_level="High"
+        )
+
+        # Should raise NarrativeValidationError after max attempts
+        with pytest.raises(NarrativeValidationError) as exc_info:
+            agent.generate_compliance_narrative(case, risk_analysis, max_regeneration_attempts=0)
+
+        assert "validation failed" in str(exc_info.value).lower()
+        assert len(exc_info.value.failed_checks) > 0
+
+        if os.path.exists("test_validation_failure.jsonl"):
+            os.remove("test_validation_failure.jsonl")
+
+    @pytest.mark.skipif(not COMPLIANCE_OFFICER_IMPLEMENTED, reason="Compliance Officer Agent not implemented yet")
+    def test_build_regeneration_prompt(self):
+        """Test regeneration prompt includes failure details"""
+        agent = ComplianceOfficerAgent(Mock(), Mock())
+
+        validation_result = {
+            "word_count": 150,
+            "failed_checks": ["word_count", "dollar_amounts", "citations"],
+            "missing_elements": ["where"]
+        }
+
+        prompt = agent._build_regeneration_prompt(validation_result)
+
+        assert "Word count (150) exceeds 120 word limit" in prompt
+        assert "dollar amounts" in prompt
+        assert "regulatory citations" in prompt
+        assert "Missing required elements: where" in prompt
