@@ -69,6 +69,19 @@
       "ComplianceOfficer"
     ],
     "human_reviewer": "compliance_officer",
-    "filing_institution": "TRACE Financial Services"
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T11:59:50.750086",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes (backfilled - SAR was previously filed)",
+      "rationale": "BACKFILLED: SAR was filed without complete decision gate record. AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=efdf7fd2-a1de-44ed-b363-8a6e5a83852c",
+      "backfilled": true,
+      "backfill_timestamp": "2026-02-03T22:59:37.126865+00:00"
+    }
   }
 }

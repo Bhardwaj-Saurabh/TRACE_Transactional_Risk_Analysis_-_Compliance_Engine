@@ -208,14 +208,14 @@ Use the ReACT (REASONING + Action) framework to generate regulatory-compliant SA
 2. Assess the regulatory narrative requirements under BSA/AML rules.
 3. Identify key compliance elements using the Five W's framework: WHO, WHAT, WHEN, WHERE, WHY.
 4. Plan the narrative structure to be concise, factual, and regulatory-compliant.
-5. **CRITICAL: Select regulatory citations that are RELEVANT to the specific typology identified.**
+5. **CRITICAL: Analyze the classification and narrative content to select ONLY relevant regulatory citations.**
 
 **ACTION Phase:**
 1. Draft a concise narrative of no more than 120 words that summarizes the suspicious activity.
 2. Include specific dollar amounts, dates, transaction locations, and channels.
 3. Reference the suspicious activity pattern identified by the Risk Analyst.
 4. Use appropriate regulatory language and terminology (e.g., "structuring," "currency transaction reporting threshold," "suspicious activity").
-5. **Cite ONLY regulations that are relevant to the specific classification type (see Citation Requirements below).**
+5. **Select citations that MATCH the specific facts described in your narrative - DO NOT use boilerplate citations.**
 
 **Narrative Requirements - The Five W's (ALL REQUIRED):**
 The narrative MUST include ALL FIVE elements:
@@ -244,24 +244,50 @@ The narrative MUST include ALL FIVE elements:
    - Connection to known suspicious patterns
 
 **CRITICAL - Typology-Specific Citation Requirements:**
-Citations MUST be relevant to the classification type. Using inappropriate citations fails validation.
 
-- **Structuring cases**: MUST cite 31 USC 5324 (anti-structuring) or 31 CFR 1010.314. May cite 31 CFR 1020.320, 31 USC 5313 (CTR requirements).
+⚠️ VALIDATION FAILURE WARNING: Citing regulations that don't match your narrative will cause validation failure and require regeneration.
 
-- **Money_Laundering cases**: MUST cite 31 USC 5318 (AML requirements), 18 USC 1956, or 18 USC 1957. May cite 31 CFR 1020.320, FinCEN guidance.
-  DO NOT cite 31 USC 5324 unless the narrative specifically describes structuring behavior (threshold evasion).
+**Structuring cases** - Transactions broken into smaller amounts to evade $10,000 CTR threshold:
+✅ MUST cite: 31 USC 5324 (anti-structuring statute) OR 31 CFR 1010.314 (structuring regulations)
+✅ May cite: 31 CFR 1020.320 (SAR filing), 31 USC 5313 (CTR requirements), FinCEN SAR Instructions
+📝 Example: "Four cash deposits of $9,900 each over three days at different branches to avoid CTR reporting."
 
-- **Sanctions cases**: MUST cite OFAC SDN List, Executive Order 13599, or other sanctions regulations. DO NOT cite 31 USC 5324.
+**Money_Laundering cases** - Layering, integration, or obscuring origin of funds:
+✅ MUST cite: 31 USC 5318 (AML program) OR 18 USC 1956 (money laundering) OR 18 USC 1957 (monetary transactions)
+✅ May cite: 31 CFR 1020.320 (SAR filing), FinCEN Advisory, FinCEN Guidance, BSA, AML
+❌ DO NOT cite: 31 USC 5324 (structuring statute) - ONLY use if narrative explicitly describes structuring/threshold evasion
+📝 Example: "Large incoming wire transfer followed by rapid outbound transfers to multiple accounts - indicative of layering."
+📝 Example where 31 USC 5324 IS appropriate: "Wire transfers followed by multiple cash withdrawals under $10,000 to evade CTR reporting."
 
-- **Fraud cases**: MUST cite FTC Red Flags Rule, 31 CFR 1020.320, or FinCEN SAR Instructions. DO NOT cite sanctions regulations.
+**Sanctions cases** - Transactions involving prohibited parties/jurisdictions:
+✅ MUST cite: OFAC SDN List OR Executive Order 13599 OR North Korea Sanctions Regulations OR Iran Sanctions
+✅ May cite: 31 CFR 1020.320 (SAR filing), FinCEN SAR Instructions
+❌ DO NOT cite: 31 USC 5324 (structuring), 31 CFR 1010.314 (structuring)
+📝 Example: "Wire transfer to entity matching OFAC SDN List entry."
 
-- **Other cases**: MUST cite 31 CFR 1020.320 or FinCEN SAR Instructions.
+**Fraud cases** - Identity theft, account takeover, deceptive practices:
+✅ MUST cite: FTC Red Flags Rule OR 31 CFR 1020.320 (SAR filing) OR FinCEN SAR Instructions
+✅ May cite: BSA, AML
+❌ DO NOT cite: OFAC SDN List, Executive Order 13599, 31 USC 5324 (structuring)
+📝 Example: "Account takeover with fraudulent wire transfers to overseas accounts."
+
+**Other cases** - Suspicious activity not fitting standard typologies:
+✅ MUST cite: 31 CFR 1020.320 (SAR filing) OR FinCEN SAR Instructions OR BSA
+✅ May cite: FinCEN Advisory, AML
+📝 Example: "Unusual transaction pattern not consistent with known typologies."
+
+**Citation Selection Checklist (Review Before Finalizing):**
+1. ✅ Does your narrative describe structuring? If NO, do not cite 31 USC 5324 or 31 CFR 1010.314
+2. ✅ Does your narrative describe layering/wire transfers/fund movement? If YES, cite AML statutes (18 USC 1956/1957, 31 USC 5318)
+3. ✅ Does your narrative mention OFAC/sanctions/prohibited parties? If NO, do not cite OFAC authorities
+4. ✅ Does your narrative describe fraud/identity theft? If NO, do not cite FTC Red Flags Rule
+5. ✅ Always include general SAR filing authority: 31 CFR 1020.320 or FinCEN SAR Instructions
 
 **Additional Requirements:**
 - Maximum 120 words — this is a strict limit
 - Must use proper BSA/AML compliance terminology
 - Must reference applicable FinCEN SAR filing requirements
-- Citations must match the typology - DO NOT use boilerplate citations
+- Citations must match the facts in your narrative - READ YOUR NARRATIVE and verify citation relevance
 
 **Output Format:**
 You MUST respond with ONLY a JSON object in this exact format:
@@ -464,7 +490,24 @@ You MUST respond with ONLY a JSON object in this exact format:
                 # Validation failed - store result and potentially retry
                 last_validation_result = validation_result
 
-                # Log validation failure
+                # Log validation failure with detailed citation information
+                citations_details = validation_result.get("citations_details", {})
+                log_output = {
+                    "validation_result": validation_result,
+                    "narrative_preview": narrative[:100] + "..." if len(narrative) > 100 else narrative,
+                    "citations_provided": citations,
+                    "classification": risk_analysis.classification
+                }
+
+                # Add citation-specific debugging info
+                if citations_details:
+                    log_output["citation_debug"] = {
+                        "valid_citations": citations_details.get("valid_citations", []),
+                        "relevant_citations": citations_details.get("relevant_citations", []),
+                        "prohibited_citations_used": citations_details.get("prohibited_citations_used", []),
+                        "unrecognized_citations": citations_details.get("unrecognized_citations", [])
+                    }
+
                 self.logger.log_agent_action(
                     agent_type="ComplianceOfficer",
                     action="validation_failed",
@@ -472,12 +515,10 @@ You MUST respond with ONLY a JSON object in this exact format:
                     input_data={
                         "customer_id": case_data.customer.customer_id,
                         "attempt": attempt + 1,
-                        "max_attempts": max_regeneration_attempts + 1
+                        "max_attempts": max_regeneration_attempts + 1,
+                        "classification": risk_analysis.classification
                     },
-                    output_data={
-                        "validation_result": validation_result,
-                        "narrative_preview": narrative[:100] + "..." if len(narrative) > 100 else narrative
-                    },
+                    output_data=log_output,
                     reasoning=f"Validation failed: {'; '.join(validation_result['error_messages'])}",
                     execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
                     success=False,
@@ -540,13 +581,33 @@ You MUST respond with ONLY a JSON object in this exact format:
         if "dollar_amounts" in validation_result.get("failed_checks", []):
             issues.append("- Must include specific dollar amounts (e.g., $9,900, $29,500)")
 
-        if "citations" in validation_result.get("failed_checks", []):
-            issues.append("- Must include valid regulatory citations (e.g., 31 CFR 1020.320, 31 USC 5324)")
+        # Enhanced citation failure feedback with specific details
+        if "citations" in validation_result.get("failed_checks", []) or "citation_relevance" in validation_result.get("failed_checks", []):
+            citations_details = validation_result.get("citations_details", {})
+
+            # Check for prohibited citations (most critical issue)
+            if citations_details.get("prohibited_citations_used"):
+                issues.append("\n⚠️ CRITICAL CITATION ERRORS:")
+                for prohibited in citations_details["prohibited_citations_used"]:
+                    issues.append(f"  • {prohibited['reason']}")
+                issues.append("\n  ACTION REQUIRED: Remove the inappropriate citations and select citations that match your narrative content.")
+
+            # Check for missing required citations
+            elif not citations_details.get("relevant_citations"):
+                issues.append(f"- Citations are not relevant to the activity type. You must cite at least one regulation specific to the classification.")
+
+            # Generic citation error
+            else:
+                issues.append("- Invalid or irrelevant regulatory citations. Review the typology-specific citation requirements.")
 
         prompt = (
-            "The previous narrative failed validation. Please regenerate addressing these issues:\n"
+            "The previous narrative FAILED VALIDATION. Please regenerate addressing these issues:\n"
             + "\n".join(issues)
-            + "\n\nGenerate a corrected narrative that passes all validation checks."
+            + "\n\n**IMPORTANT**: Before finalizing, verify that:\n"
+            + "1. Your citations match the facts described in your narrative\n"
+            + "2. You are NOT citing 31 USC 5324 unless your narrative explicitly describes structuring (transactions under $10,000 to evade CTR)\n"
+            + "3. You have at least one citation specific to the classification type\n\n"
+            + "Generate a corrected narrative with appropriate citations."
         )
         return prompt
 
@@ -566,6 +627,45 @@ You MUST respond with ONLY a JSON object in this exact format:
             return match.group(0).strip()
 
         raise ValueError("No JSON content found in response")
+
+    def _get_citation_guidance(self, classification: str) -> str:
+        """Get classification-specific citation guidance for the user prompt."""
+        guidance_map = {
+            "Structuring": """
+**CITATION REQUIREMENTS for Structuring**:
+✅ MUST cite: 31 USC 5324 (anti-structuring) OR 31 CFR 1010.314
+✅ May cite: 31 CFR 1020.320, 31 USC 5313, FinCEN SAR Instructions
+📝 Your narrative should describe transactions under $10,000 threshold to evade CTR reporting.""",
+
+            "Money_Laundering": """
+**CITATION REQUIREMENTS for Money_Laundering**:
+✅ MUST cite: 31 USC 5318 (AML) OR 18 USC 1956 OR 18 USC 1957
+✅ May cite: 31 CFR 1020.320, FinCEN Advisory, BSA, AML
+❌ DO NOT cite: 31 USC 5324 (structuring) - ONLY use if narrative mentions structuring/threshold evasion
+📝 Your narrative should describe layering, integration, or fund movement patterns.""",
+
+            "Sanctions": """
+**CITATION REQUIREMENTS for Sanctions**:
+✅ MUST cite: OFAC SDN List OR Executive Order 13599 OR sanctions regulations
+✅ May cite: 31 CFR 1020.320, FinCEN SAR Instructions
+❌ DO NOT cite: 31 USC 5324 (structuring)
+📝 Your narrative should describe transactions with prohibited parties/jurisdictions.""",
+
+            "Fraud": """
+**CITATION REQUIREMENTS for Fraud**:
+✅ MUST cite: FTC Red Flags Rule OR 31 CFR 1020.320 OR FinCEN SAR Instructions
+✅ May cite: BSA, AML
+❌ DO NOT cite: OFAC authorities, 31 USC 5324 (structuring)
+📝 Your narrative should describe identity theft, account takeover, or deceptive practices.""",
+
+            "Other": """
+**CITATION REQUIREMENTS for Other**:
+✅ MUST cite: 31 CFR 1020.320 OR FinCEN SAR Instructions OR BSA
+✅ May cite: FinCEN Advisory, AML
+📝 Your narrative should describe suspicious activity not fitting standard typologies."""
+        }
+
+        return guidance_map.get(classification, guidance_map["Other"])
 
     def _format_risk_analysis_for_prompt(self, risk_analysis) -> str:
         """Format risk analysis results for compliance prompt."""
@@ -992,6 +1092,9 @@ You MUST respond with ONLY a JSON object in this exact format:
         # Calculate total amount for WHAT element
         total_amount = sum(txn.amount for txn in case_data.transactions)
 
+        # Get citation guidance for this classification
+        citation_guidance = self._get_citation_guidance(risk_analysis.classification)
+
         lines = [
             "Generate a SAR narrative for the following case:",
             f"\n--- Case: {case_data.case_id} ---",
@@ -1011,10 +1114,11 @@ You MUST respond with ONLY a JSON object in this exact format:
             self._format_risk_analysis_for_prompt(risk_analysis),
             f"\n--- Transaction Details ---",
             self._format_transactions_for_compliance(case_data.transactions),
-            f"\n**IMPORTANT**: The narrative MUST:",
+            f"\n**IMPORTANT REQUIREMENTS**:",
             f"1. Be 120 words or fewer",
             f"2. Include ALL Five W's: WHO, WHAT, WHEN, WHERE, WHY",
-            f"3. Specifically mention transaction locations/channels for WHERE element"
+            f"3. Specifically mention transaction locations/channels for WHERE element",
+            f"\n{citation_guidance}"
         ]
         return "\n".join(lines)
 
