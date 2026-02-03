@@ -1036,3 +1036,98 @@ class TestErrorHandlingAndRecovery:
         assert "risk_level" in result
         assert "reasoning" in result
         assert "key_indicators" in result
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_malformed_json_default_fallback_with_audit_logging(self):
+        """Test default enable_fallback=True returns fallback output AND logs appropriately.
+
+        This test validates the intended behavior: when RiskAnalystAgent receives malformed
+        JSON with default settings (enable_fallback=True), it should:
+        1. Return a valid RiskAnalystOutput instead of raising an exception
+        2. Use fallback extraction strategies (partial extraction or full fallback)
+        3. Log the recovery action appropriately for audit trail
+        4. Maintain Chain-of-Thought step format in output
+        """
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        # Completely malformed response that cannot be recovered via primary parsing
+        mock_response.choices[0].message.content = "This is not JSON at all - completely invalid response"
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_default_fallback_audit.jsonl")
+        # Use default enable_fallback=True (the default behavior)
+        agent = RiskAnalystAgent(mock_client, logger)  # enable_fallback defaults to True
+
+        case = self._create_test_case()
+
+        # Should NOT raise - should return fallback/recovery output
+        result = agent.analyze_case(case)
+
+        # Verify a valid RiskAnalystOutput is returned (either via partial extraction or full fallback)
+        assert result is not None
+        assert type(result).__name__ == 'RiskAnalystOutput'
+        assert result.classification == "Other"  # Default classification for unrecognized patterns
+        assert result.risk_level == "Medium"  # Safe default risk level
+        # Confidence can be 0.0 (full fallback) or 0.5 (partial extraction defaults)
+        assert result.confidence_score in [0.0, 0.5]
+
+        # Verify Chain-of-Thought format is maintained in fallback
+        assert "Step 1" in result.reasoning
+        assert "Step 5" in result.reasoning
+        assert result.has_explicit_steps() == True
+
+        # Verify appropriate logging occurred for audit trail
+        assert len(logger.entries) >= 1, "Agent should log action for audit trail"
+
+        # Check that log entry has expected structure
+        log_entry = logger.entries[-1]
+        assert log_entry["agent_type"] == "RiskAnalyst"
+        assert log_entry["case_id"] == "CASE_ERR"
+        assert "reasoning" in log_entry
+
+        # If fallback extraction was used, verify it's properly documented
+        if "fallback" in log_entry.get("action", ""):
+            reasoning = log_entry.get("reasoning", "")
+            # Fallback can be documented as "Recovered using..." or "Fallback..."
+            assert "Recovered" in reasoning or "Fallback" in reasoning or "fallback" in reasoning.lower()
+
+        # Cleanup
+        if os.path.exists("test_default_fallback_audit.jsonl"):
+            os.remove("test_default_fallback_audit.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_complete_fallback_when_all_extraction_fails(self):
+        """Test full fallback output when all extraction strategies fail.
+
+        This tests the scenario where the response is so malformed that even
+        partial extraction fails, triggering the full _create_fallback_output path.
+        """
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        # Empty/null-like response that partial extraction can't handle
+        mock_response.choices[0].message.content = None
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_complete_fallback.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger, enable_fallback=True)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Verify full fallback output characteristics
+        assert result is not None
+        assert result.classification == "Other"
+        assert result.confidence_score == 0.0
+        assert "processing_error" in result.key_indicators
+        assert "manual_review_required" in result.key_indicators
+        assert "fallback_output" in result.key_indicators
+
+        # Verify error was logged
+        error_entries = [e for e in logger.entries if e.get("success") == False]
+        assert len(error_entries) >= 1
+
+        # Cleanup
+        if os.path.exists("test_complete_fallback.jsonl"):
+            os.remove("test_complete_fallback.jsonl")

@@ -308,8 +308,28 @@ class ExplainabilityLogger:
 
 # ===== DATA LOADER =====
 
+class NoTransactionsError(Exception):
+    """Raised when a customer has no transactions and cannot form a valid case.
+
+    This is expected behavior - SAR cases require transaction data to analyze.
+    Customers without transactions should be skipped, not treated as errors.
+    """
+    def __init__(self, customer_id: str, customer_name: str, reason: str = "no_transactions"):
+        self.customer_id = customer_id
+        self.customer_name = customer_name
+        self.reason = reason
+        message = f"Cannot create case for {customer_name} ({customer_id}): {reason}"
+        super().__init__(message)
+
+
 class DataLoader:
-    """Simple loader that creates case objects from CSV data"""
+    """Simple loader that creates case objects from CSV data.
+
+    Handles cases where customers have no transactions gracefully by:
+    1. Raising NoTransactionsError for explicit handling
+    2. Providing try_create_case_from_data() for Optional returns
+    3. Tracking skipped customers in batch processing
+    """
 
     def __init__(self, explainability_logger: ExplainabilityLogger):
         self.logger = explainability_logger
@@ -318,6 +338,20 @@ class DataLoader:
                               customer_data: Dict,
                               account_data: List[Dict],
                               transaction_data: List[Dict]) -> CaseData:
+        """Create a case from customer, account, and transaction data.
+
+        Args:
+            customer_data: Customer information dictionary
+            account_data: List of all account records
+            transaction_data: List of all transaction records
+
+        Returns:
+            CaseData object for SAR analysis
+
+        Raises:
+            NoTransactionsError: If customer has no transactions (expected for some customers)
+            ValidationError: If data fails Pydantic validation
+        """
         start_time = datetime.now()
         try:
             case_id = str(uuid.uuid4())
@@ -329,6 +363,26 @@ class DataLoader:
 
             transactions = [TransactionData(**txn) for txn in transaction_data
                             if txn['account_id'] in account_ids]
+
+            # Pre-check: Raise clear error if no transactions found
+            if not transactions:
+                execution_time_ms = (datetime.now() - start_time).total_seconds() * 1000
+                self.logger.log_agent_action(
+                    agent_type="DataLoader",
+                    action="create_case",
+                    case_id="SKIPPED",
+                    input_data={"customer_id": customer.customer_id},
+                    output_data={"accounts": len(accounts), "transactions": 0},
+                    reasoning="Customer has no transactions - cannot create SAR case",
+                    execution_time_ms=execution_time_ms,
+                    success=True,  # This is expected behavior, not an error
+                    error_message=None
+                )
+                raise NoTransactionsError(
+                    customer_id=customer.customer_id,
+                    customer_name=customer.name,
+                    reason="no transactions found for SAR analysis"
+                )
 
             case = CaseData(
                 case_id=case_id,
@@ -356,6 +410,10 @@ class DataLoader:
             )
             return case
 
+        except NoTransactionsError:
+            # Re-raise without additional logging (already logged above)
+            raise
+
         except Exception as e:
             execution_time_ms = (datetime.now() - start_time).total_seconds() * 1000
             self.logger.log_agent_action(
@@ -370,6 +428,85 @@ class DataLoader:
                 error_message=str(e)
             )
             raise
+
+    def try_create_case_from_data(self,
+                                   customer_data: Dict,
+                                   account_data: List[Dict],
+                                   transaction_data: List[Dict]) -> Optional[CaseData]:
+        """Attempt to create a case, returning None if customer has no transactions.
+
+        This is a convenience method for workflows that expect some customers
+        to have no transactions and want to handle them gracefully.
+
+        Args:
+            customer_data: Customer information dictionary
+            account_data: List of all account records
+            transaction_data: List of all transaction records
+
+        Returns:
+            CaseData object if successful, None if customer has no transactions
+
+        Raises:
+            ValidationError: If data fails Pydantic validation (not for missing transactions)
+        """
+        try:
+            return self.create_case_from_data(customer_data, account_data, transaction_data)
+        except NoTransactionsError:
+            return None
+
+    def create_cases_from_dataset(self,
+                                   customers_df,
+                                   accounts_df,
+                                   transactions_df) -> Dict[str, Any]:
+        """Process entire dataset and create cases for all eligible customers.
+
+        This method handles the full dataset, tracking both successful cases
+        and customers who were skipped due to no transactions.
+
+        Args:
+            customers_df: DataFrame of customer records
+            accounts_df: DataFrame of account records
+            transactions_df: DataFrame of transaction records
+
+        Returns:
+            Dictionary containing:
+                - cases: List of successfully created CaseData objects
+                - skipped_customers: List of dicts with customer_id, name, reason
+                - statistics: Summary counts
+        """
+        cases: List[CaseData] = []
+        skipped_customers: List[Dict[str, str]] = []
+
+        # Convert DataFrames to list of dicts
+        accounts_list = accounts_df.to_dict('records')
+        transactions_list = transactions_df.to_dict('records')
+
+        for _, customer_row in customers_df.iterrows():
+            customer_data = customer_row.to_dict()
+            try:
+                case = self.create_case_from_data(
+                    customer_data=customer_data,
+                    account_data=accounts_list,
+                    transaction_data=transactions_list
+                )
+                cases.append(case)
+            except NoTransactionsError as e:
+                skipped_customers.append({
+                    'customer_id': e.customer_id,
+                    'customer_name': e.customer_name,
+                    'reason': e.reason
+                })
+
+        return {
+            'cases': cases,
+            'skipped_customers': skipped_customers,
+            'statistics': {
+                'total_customers': len(customers_df),
+                'cases_created': len(cases),
+                'customers_skipped': len(skipped_customers),
+                'skip_rate': len(skipped_customers) / len(customers_df) if len(customers_df) > 0 else 0
+            }
+        }
 
 
 # ===== HELPER FUNCTIONS (PROVIDED) =====

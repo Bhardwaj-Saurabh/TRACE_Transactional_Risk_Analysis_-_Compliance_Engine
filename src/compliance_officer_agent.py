@@ -78,11 +78,117 @@ VALID_REGULATORY_CITATIONS = [
     # OFAC
     "OFAC SDN List",
     "Executive Order 13599",
+    "North Korea Sanctions Regulations",
+    "Iran Sanctions",
     # Other
     "FTC Red Flags Rule",
     "BSA",
     "AML",
+    "18 USC 1956",
+    "18 USC 1957",
 ]
+
+# ===== TYPOLOGY-SPECIFIC CITATION MAPPING =====
+# Maps classification types to their REQUIRED and PROHIBITED citations
+# This ensures citations are relevant to the actual suspicious activity type
+
+TYPOLOGY_CITATION_MAPPING = {
+    "Structuring": {
+        "required_any": [
+            # Must cite at least one structuring-specific regulation
+            "31 USC 5324",  # Anti-structuring statute
+            "31 CFR 1010.314",  # Structuring regulations
+        ],
+        "recommended": [
+            "31 CFR 1020.320",  # SAR filing requirements (always appropriate)
+            "FinCEN SAR Instructions",
+            "31 USC 5313",  # CTR requirements (structuring evades this)
+        ],
+        "prohibited": [
+            # Don't cite these for structuring cases
+            "OFAC SDN List",
+            "Executive Order 13599",
+            "North Korea Sanctions Regulations",
+            "Iran Sanctions",
+        ],
+        "description": "Structuring involves breaking up transactions to avoid CTR reporting thresholds"
+    },
+    "Money_Laundering": {
+        "required_any": [
+            # Must cite at least one money laundering regulation
+            "31 USC 5318",  # AML program requirements
+            "18 USC 1956",  # Money laundering statute
+            "18 USC 1957",  # Monetary transactions with criminally derived property
+            "31 CFR 1020.320",  # SAR filing (central to AML)
+        ],
+        "recommended": [
+            "FinCEN SAR Instructions",
+            "FinCEN Advisory",
+            "BSA",
+            "AML",
+        ],
+        "prohibited": [
+            # 31 USC 5324 is structuring-specific - don't use for general ML
+            # unless the ML case involves structuring as a component
+        ],
+        "conditionally_prohibited": [
+            # Only use 31 USC 5324 if narrative mentions structuring/threshold avoidance
+            ("31 USC 5324", ["structur", "threshold", "under $10,000", "ctr", "currency transaction report"]),
+        ],
+        "description": "Money laundering involves placement, layering, or integration of illicit funds"
+    },
+    "Sanctions": {
+        "required_any": [
+            # Must cite at least one sanctions-related authority
+            "OFAC SDN List",
+            "Executive Order 13599",
+            "North Korea Sanctions Regulations",
+            "Iran Sanctions",
+        ],
+        "recommended": [
+            "31 CFR 1020.320",  # SAR filing
+            "FinCEN SAR Instructions",
+        ],
+        "prohibited": [
+            # Don't cite structuring statute for sanctions cases
+            "31 USC 5324",
+            "31 CFR 1010.314",
+        ],
+        "description": "Sanctions violations involve transactions with prohibited parties/jurisdictions"
+    },
+    "Fraud": {
+        "required_any": [
+            # Must cite at least one fraud-related authority
+            "FTC Red Flags Rule",
+            "31 CFR 1020.320",  # SAR filing
+            "FinCEN SAR Instructions",
+        ],
+        "recommended": [
+            "BSA",
+            "AML",
+        ],
+        "prohibited": [
+            # Don't cite sanctions regulations for fraud cases
+            "OFAC SDN List",
+            "Executive Order 13599",
+        ],
+        "description": "Fraud involves deceptive practices, identity theft, or account takeover"
+    },
+    "Other": {
+        "required_any": [
+            # Generic SAR filing authority always required
+            "31 CFR 1020.320",
+            "FinCEN SAR Instructions",
+            "BSA",
+        ],
+        "recommended": [
+            "FinCEN Advisory",
+            "AML",
+        ],
+        "prohibited": [],  # No specific prohibitions for "Other"
+        "description": "Suspicious activity not fitting standard typologies"
+    }
+}
 
 
 class ComplianceOfficerAgent:
@@ -102,13 +208,14 @@ Use the ReACT (REASONING + Action) framework to generate regulatory-compliant SA
 2. Assess the regulatory narrative requirements under BSA/AML rules.
 3. Identify key compliance elements using the Five W's framework: WHO, WHAT, WHEN, WHERE, WHY.
 4. Plan the narrative structure to be concise, factual, and regulatory-compliant.
+5. **CRITICAL: Select regulatory citations that are RELEVANT to the specific typology identified.**
 
 **ACTION Phase:**
 1. Draft a concise narrative of no more than 120 words that summarizes the suspicious activity.
 2. Include specific dollar amounts, dates, transaction locations, and channels.
 3. Reference the suspicious activity pattern identified by the Risk Analyst.
 4. Use appropriate regulatory language and terminology (e.g., "structuring," "currency transaction reporting threshold," "suspicious activity").
-5. Cite relevant regulations (31 CFR 1020.320, 31 USC 5324, FinCEN SAR Instructions).
+5. **Cite ONLY regulations that are relevant to the specific classification type (see Citation Requirements below).**
 
 **Narrative Requirements - The Five W's (ALL REQUIRED):**
 The narrative MUST include ALL FIVE elements:
@@ -136,17 +243,32 @@ The narrative MUST include ALL FIVE elements:
    - Reference to regulatory thresholds violated
    - Connection to known suspicious patterns
 
+**CRITICAL - Typology-Specific Citation Requirements:**
+Citations MUST be relevant to the classification type. Using inappropriate citations fails validation.
+
+- **Structuring cases**: MUST cite 31 USC 5324 (anti-structuring) or 31 CFR 1010.314. May cite 31 CFR 1020.320, 31 USC 5313 (CTR requirements).
+
+- **Money_Laundering cases**: MUST cite 31 USC 5318 (AML requirements), 18 USC 1956, or 18 USC 1957. May cite 31 CFR 1020.320, FinCEN guidance.
+  DO NOT cite 31 USC 5324 unless the narrative specifically describes structuring behavior (threshold evasion).
+
+- **Sanctions cases**: MUST cite OFAC SDN List, Executive Order 13599, or other sanctions regulations. DO NOT cite 31 USC 5324.
+
+- **Fraud cases**: MUST cite FTC Red Flags Rule, 31 CFR 1020.320, or FinCEN SAR Instructions. DO NOT cite sanctions regulations.
+
+- **Other cases**: MUST cite 31 CFR 1020.320 or FinCEN SAR Instructions.
+
 **Additional Requirements:**
 - Maximum 120 words — this is a strict limit
 - Must use proper BSA/AML compliance terminology
 - Must reference applicable FinCEN SAR filing requirements
+- Citations must match the typology - DO NOT use boilerplate citations
 
 **Output Format:**
 You MUST respond with ONLY a JSON object in this exact format:
 {
     "narrative": "The SAR narrative text (max 120 words) - MUST include all Five W's",
     "narrative_reasoning": "Explanation of narrative construction approach (max 500 chars)",
-    "regulatory_citations": ["31 CFR 1020.320", "other relevant citations"],
+    "regulatory_citations": ["citation relevant to classification type", "other relevant citations"],
     "completeness_check": true or false (true ONLY if all Five W's are present)
 }"""
 
@@ -301,12 +423,13 @@ You MUST respond with ONLY a JSON object in this exact format:
                 citations = parsed.get("regulatory_citations", [])
                 model_completeness = parsed.get("completeness_check", False)
 
-                # Run pre-finalization validation gate
+                # Run pre-finalization validation gate (with typology-specific citation validation)
                 validation_result = self._pre_finalization_validation(
                     narrative=narrative,
                     citations=citations,
                     case_data=case_data,
-                    model_completeness_check=model_completeness
+                    model_completeness_check=model_completeness,
+                    classification=risk_analysis.classification
                 )
 
                 if validation_result["can_finalize"]:
@@ -606,25 +729,41 @@ You MUST respond with ONLY a JSON object in this exact format:
                 return True
         return False
 
-    def _validate_regulatory_citations(self, citations: List[str]) -> Dict[str, Any]:
-        """Validate regulatory citations are non-empty and contain valid references.
+    def _validate_regulatory_citations(self, citations: List[str],
+                                         classification: str = None,
+                                         narrative: str = None) -> Dict[str, Any]:
+        """Validate regulatory citations are relevant to the specific suspicious activity type.
+
+        This method validates that:
+        1. Citations are recognized (in the valid allowlist)
+        2. At least one citation is relevant to the classification type
+        3. No prohibited citations are used for the classification type
+        4. Conditional prohibitions are enforced (e.g., 31 USC 5324 for ML only if structuring mentioned)
 
         Args:
             citations: List of regulatory citation strings
+            classification: The suspicious activity classification (Structuring, Money_Laundering, etc.)
+            narrative: The SAR narrative text (for conditional prohibition checks)
 
         Returns:
             Dictionary with validation results including:
             - is_valid: Whether citations pass validation
             - has_citations: Whether any citations provided
             - valid_citations: List of recognized citations
+            - relevant_citations: List of citations relevant to classification
             - unrecognized_citations: List of unrecognized citations
+            - prohibited_citations_used: List of citations that shouldn't be used for this type
+            - relevance_valid: Whether citations are relevant to classification
             - error_message: Description of validation failure (if any)
         """
         result = {
             "is_valid": False,
             "has_citations": False,
             "valid_citations": [],
+            "relevant_citations": [],
             "unrecognized_citations": [],
+            "prohibited_citations_used": [],
+            "relevance_valid": False,
             "error_message": None
         }
 
@@ -635,30 +774,89 @@ You MUST respond with ONLY a JSON object in this exact format:
 
         result["has_citations"] = True
 
+        # Get typology mapping for this classification
+        typology_config = TYPOLOGY_CITATION_MAPPING.get(classification, TYPOLOGY_CITATION_MAPPING.get("Other"))
+        required_any = typology_config.get("required_any", [])
+        prohibited = typology_config.get("prohibited", [])
+        conditionally_prohibited = typology_config.get("conditionally_prohibited", [])
+
         # Validate each citation
         for citation in citations:
             citation_normalized = citation.strip()
+            citation_lower = citation_normalized.lower()
             is_recognized = False
+            matched_citation = None
 
+            # Check if citation is recognized
             for valid_citation in VALID_REGULATORY_CITATIONS:
-                if valid_citation.lower() in citation_normalized.lower():
+                if valid_citation.lower() in citation_lower:
                     is_recognized = True
+                    matched_citation = valid_citation
                     result["valid_citations"].append(citation_normalized)
                     break
 
             if not is_recognized:
                 result["unrecognized_citations"].append(citation_normalized)
+                continue
 
-        # Require at least one valid citation
-        if result["valid_citations"]:
-            result["is_valid"] = True
-        else:
+            # Check if citation is prohibited for this classification
+            is_prohibited = False
+            for prohibited_citation in prohibited:
+                if prohibited_citation.lower() in citation_lower:
+                    is_prohibited = True
+                    result["prohibited_citations_used"].append({
+                        "citation": citation_normalized,
+                        "reason": f"'{prohibited_citation}' is not relevant to {classification} cases"
+                    })
+                    break
+
+            # Check conditional prohibitions (e.g., 31 USC 5324 for ML)
+            if not is_prohibited and narrative:
+                narrative_lower = narrative.lower()
+                for cond_citation, required_keywords in conditionally_prohibited:
+                    if cond_citation.lower() in citation_lower:
+                        # Check if any required keyword is in the narrative
+                        keyword_found = any(kw.lower() in narrative_lower for kw in required_keywords)
+                        if not keyword_found:
+                            is_prohibited = True
+                            result["prohibited_citations_used"].append({
+                                "citation": citation_normalized,
+                                "reason": f"'{cond_citation}' should only be used when narrative mentions: {', '.join(required_keywords)}"
+                            })
+                        break
+
+            # Check if citation is relevant (matches required citations for this type)
+            if not is_prohibited:
+                for required_citation in required_any:
+                    if required_citation.lower() in citation_lower:
+                        result["relevant_citations"].append(citation_normalized)
+                        break
+
+        # Determine overall validity
+        has_required = len(result["relevant_citations"]) > 0
+        no_prohibited = len(result["prohibited_citations_used"]) == 0
+        has_valid = len(result["valid_citations"]) > 0
+
+        result["relevance_valid"] = has_required and no_prohibited
+
+        if not has_valid:
             result["error_message"] = "No recognized regulatory citations found"
+        elif not has_required:
+            result["error_message"] = (
+                f"Citations missing relevance to {classification} typology. "
+                f"Required: at least one of {required_any}"
+            )
+        elif not no_prohibited:
+            prohibited_details = "; ".join([p["reason"] for p in result["prohibited_citations_used"]])
+            result["error_message"] = f"Inappropriate citations for {classification}: {prohibited_details}"
+        else:
+            result["is_valid"] = True
 
         return result
 
     def _pre_finalization_validation(self, narrative: str, citations: List[str],
-                                      case_data, model_completeness_check: bool) -> Dict[str, Any]:
+                                      case_data, model_completeness_check: bool,
+                                      classification: str = None) -> Dict[str, Any]:
         """Deterministic pre-finalization validation gate.
 
         This method performs comprehensive validation of the SAR narrative
@@ -669,7 +867,7 @@ You MUST respond with ONLY a JSON object in this exact format:
         1. Word count within 120 word limit
         2. All Five W's present (WHO, WHAT, WHEN, WHERE, WHY)
         3. Dollar amounts included in narrative
-        4. Valid regulatory citations provided
+        4. Valid AND RELEVANT regulatory citations provided (typology-specific)
         5. Narrative has substantive content
 
         Args:
@@ -677,6 +875,7 @@ You MUST respond with ONLY a JSON object in this exact format:
             citations: List of regulatory citations
             case_data: Original case data for context
             model_completeness_check: The model's self-reported completeness (not trusted)
+            classification: The suspicious activity classification for citation relevance check
 
         Returns:
             Dictionary with comprehensive validation results
@@ -725,16 +924,29 @@ You MUST respond with ONLY a JSON object in this exact format:
                 "Narrative must include specific dollar amounts"
             )
 
-        # 4. Validate regulatory citations
-        citations_result = self._validate_regulatory_citations(citations)
+        # 4. Validate regulatory citations (including relevance to classification)
+        citations_result = self._validate_regulatory_citations(
+            citations=citations,
+            classification=classification,
+            narrative=narrative
+        )
         validation_result["citations_valid"] = citations_result["is_valid"]
         validation_result["citations_details"] = citations_result
 
         if not validation_result["citations_valid"]:
             validation_result["failed_checks"].append("citations")
             validation_result["error_messages"].append(
-                citations_result["error_message"] or "Invalid regulatory citations"
+                citations_result["error_message"] or "Invalid or irrelevant regulatory citations"
             )
+
+        # Check for prohibited citations (separate check for clarity)
+        if citations_result.get("prohibited_citations_used"):
+            if "citation_relevance" not in validation_result["failed_checks"]:
+                validation_result["failed_checks"].append("citation_relevance")
+            for prohibited in citations_result["prohibited_citations_used"]:
+                validation_result["error_messages"].append(
+                    f"Inappropriate citation: {prohibited['reason']}"
+                )
 
         # 5. Check for substantive content
         validation_result["has_content"] = len(narrative.strip()) >= 50

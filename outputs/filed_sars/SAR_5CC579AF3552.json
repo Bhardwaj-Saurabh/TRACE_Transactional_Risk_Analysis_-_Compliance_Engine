@@ -1,0 +1,83 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_5CC579AF3552",
+    "filing_date": "2026-02-03T22:25:52.057278",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "cc08438bd0de3705c6db7bcd9c2c1c121bb2e9e772222000da5d271ae6260c19",
+    "test_scenario": true,
+    "classification_coverage_test": "Sanctions"
+  },
+  "subject_information": {
+    "customer_name": "Alexander Petrov",
+    "customer_id": "CUST_SANCTIONS_TEST",
+    "date_of_birth": "1965-11-22",
+    "ssn_last_4": "7834",
+    "address": "1450 International Plaza, Suite 200, New York, NY 10019",
+    "customer_since": "2022-03-15",
+    "risk_rating": "High",
+    "occupation": "Import/Export Business Owner",
+    "annual_income": 450000
+  },
+  "suspicious_activity": {
+    "classification": "Sanctions",
+    "risk_level": "Critical",
+    "confidence_score": 1.0,
+    "narrative": "From 2025-06-01 to 2025-07-05, high-risk customer Alexander Petrov (CUST_SANCTIONS_TEST) executed seven wire transfers totaling $15,000.00. Transactions were conducted via international wires to high-risk jurisdictions including Iran, North Korea, Syria, Russia, and Cuba. This activity, classified as sanctions violations, is suspicious due to the involvement of sanctioned entities and jurisdictions under OFAC scrutiny, potentially violating OFAC sanctions.",
+    "narrative_word_count": 56,
+    "key_indicators": [
+      "High-risk jurisdictions",
+      "Sanctioned entities",
+      "OFAC scrutiny"
+    ],
+    "ai_reasoning": "Step 1: The customer, Alexander Petrov, is an Import/Export Business Owner with a high risk rating. He has been a customer since 2022 and his annual income is $450,000. He has a Business Checking account with a balance of $285,000.00. The account is currently under review. There are seven transactions on his account, all of which are wire transfers. Step 2: The transactions involve multiple high-risk jurisdictions including Iran, North Korea, Syria, Russia, and Cuba. The transactions also involve entities that are either sanctioned or under OFAC scrutiny. Step 3: The transactions potentially violate OFAC sanctions. The customer has made wire transfers to entities in Iran, North Korea, Syria, Russia, and Cuba, all of which are subject to OFAC sanctions. Step 4: The risk level is critical due to the clear violations of OFAC sanctions. The customer has made transactions to entities in multiple sanctioned countries and entities under OFAC scrutiny. Step 5: The predominant pattern is sanctions violations."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324",
+      "FinCEN SAR Instructions"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's suspicious activity, the transaction methods, locations, and the reason for suspicion, referencing OFAC sanctions.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_SANCTIONS_TEST_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 285000.0,
+      "status": "Under_Review"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 7,
+    "total_volume": 375000.0,
+    "date_range": {
+      "earliest": "2025-06-01",
+      "latest": "2025-07-05"
+    }
+  },
+  "audit_trail": {
+    "case_id": "c5e45b80-8456-41c3-afbe-627d43b56a6f",
+    "processing_date": "2026-02-03T22:25:52.057278",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:25:52.057278",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Sanctions",
+      "ai_classification_at_decision": "Sanctions",
+      "ai_confidence_at_decision": 1.0,
+      "ai_risk_level_at_decision": "Critical",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=c5e45b80-8456-41c3-afbe-627d43b56a6f"
+    }
+  }
+}

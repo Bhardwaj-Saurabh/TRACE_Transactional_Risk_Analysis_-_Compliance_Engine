@@ -1,0 +1,83 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_9AF94BC55524",
+    "filing_date": "2026-02-03T22:26:47.848215",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "05277c3ea11b010bbec3c8cbd4e90ec8ebc3e3f1e5a95a833a462542a00b9603",
+    "test_scenario": true,
+    "classification_coverage_test": "Money_Laundering"
+  },
+  "subject_information": {
+    "customer_name": "Diana Morrison",
+    "customer_id": "CUST_OTHER_TEST",
+    "date_of_birth": "1988-12-03",
+    "ssn_last_4": "2956",
+    "address": "2200 Lake Shore Drive, Chicago, IL 60614",
+    "customer_since": "2019-08-10",
+    "risk_rating": "Low",
+    "occupation": "Freelance Consultant",
+    "annual_income": 72000
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.8,
+    "narrative": "Diana Morrison (CUST_OTHER_TEST) engaged in potential money laundering from 2025-06-01 to 2025-06-20. Five transactions totaling $16,500 were conducted online via wire and ACH. On 2025-06-01, a $15,000 wire transfer was received, followed by a $12,000 transfer to an unclear recipient on 2025-06-05. ACH credits of $8,500 and $11,000 were received on 2025-06-10 and 2025-06-20, respectively. Key indicators include cryptocurrency exchange proceeds, online gambling payments, NFT sale proceeds, and unclear purpose transfer. Despite her low-risk profile, the discrepancy between her stated income and account activity, coupled with high-risk transaction patterns, suggest potential money laundering.",
+    "narrative_word_count": 93,
+    "key_indicators": [
+      "cryptocurrency exchange proceeds",
+      "online gambling payment",
+      "NFT sale proceeds",
+      "unclear purpose transfer"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a low-risk rating individual with an occupation as a Freelance Consultant and an annual income of $72,000. The account balance and average monthly balance are higher than expected given the customer's stated income. The transaction history shows a mix of incoming and outgoing transactions, including proceeds from a cryptocurrency exchange, payments from an online gambling platform, and proceeds from an NFT sale. Step 2: The pattern of transactions includes several high-risk factors, such as cryptocurrency involvement, online gambling, and digital asset trading. The purpose of a $12,000 transfer to a peer is unclear, and the recipient is noted as frequent. Step 3: These patterns map to potential money laundering typologies, where funds from potentially illicit sources (cryptocurrency, gambling, NFT sales) are integrated into the banking system. Step 4: The risk level is medium to high due to the nature of the transactions and the discrepancy between the customer's stated income and account activity. Step 5: The predominant pattern is indicative of potential money laundering activity."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the suspicious activity, the customer's profile, and the discrepancy between her income and account activity. It also references key indicators and potential money laundering.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_OTHER_TEST_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 18500.0,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 5,
+    "total_volume": 52500.0,
+    "date_range": {
+      "earliest": "2025-06-01",
+      "latest": "2025-06-20"
+    }
+  },
+  "audit_trail": {
+    "case_id": "5d2c91f3-035d-42af-bbb2-576c22226438",
+    "processing_date": "2026-02-03T22:26:47.848215",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:26:47.848215",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Money_Laundering",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.8,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=5d2c91f3-035d-42af-bbb2-576c22226438"
+    }
+  }
+}

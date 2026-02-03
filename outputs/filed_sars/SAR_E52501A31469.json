@@ -1,0 +1,83 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_E52501A31469",
+    "filing_date": "2026-02-03T22:25:33.637219",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "351b2756ad47e3edf1f246ad75574bc93a2f169c319a9e05269dfe2dac154a4a",
+    "test_scenario": true,
+    "classification_coverage_test": "Fraud"
+  },
+  "subject_information": {
+    "customer_name": "Marcus Thompson",
+    "customer_id": "CUST_FRAUD_TEST",
+    "date_of_birth": "1978-03-15",
+    "ssn_last_4": "4521",
+    "address": "892 Oak Street, Denver, CO 80205",
+    "customer_since": "2018-05-20",
+    "risk_rating": "Low",
+    "occupation": "Software Engineer",
+    "annual_income": 125000
+  },
+  "suspicious_activity": {
+    "classification": "Fraud",
+    "risk_level": "High",
+    "confidence_score": 1.0,
+    "narrative": "Marcus Thompson (CUST_FRAUD_TEST) engaged in suspicious activity, classified as Fraud, totaling $37,456.78 across 7 transactions from 2025-07-01 to 2025-07-16. Transactions occurred via ATM in Miami, FL, Denver Main Branch, and online via a foreign IP, using debit and wire methods. On 2025-07-15, three unauthorized wire transfers totaling $35,500 were made from the foreign IP, along with a $2,000 ATM withdrawal in Miami. This activity, including failed identity verification, aligns with an account takeover pattern, violating BSA/AML regulations.",
+    "narrative_word_count": 77,
+    "key_indicators": [
+      "Unauthorized wire transfers",
+      "Failed identity verification",
+      "Foreign IP address",
+      "Account takeover pattern"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a software engineer with an annual income of $125,000. The account balance is $2,500.00 with an average monthly turnover of $45,000.00. The account status is suspended. There are seven transactions, including three unauthorized wire transfers, an ATM withdrawal with failed identity verification, and an additional blocked online transfer. Step 2: The pattern of transactions indicates a case of account takeover, with multiple unauthorized transactions from a foreign IP address and an unusual ATM withdrawal location. Step 3: This pattern maps to fraud under the Bank Secrecy Act (BSA) and USA PATRIOT Act, which require financial institutions to monitor and report suspicious activities that could indicate criminal behavior, such as unauthorized access to accounts. Step 4: The risk level is high due to the number and size of unauthorized transactions, the account takeover pattern, and the failed identity verification. Step 5: The predominant pattern is Fraud, specifically account takeover."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the customer's identity, suspicious activity, timeframe, locations/methods, and reason for suspicion. It emphasizes the unauthorized transactions and account takeover pattern.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_FRAUD_TEST_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 2500.0,
+      "status": "Suspended"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 7,
+    "total_volume": 47856.78,
+    "date_range": {
+      "earliest": "2025-07-01",
+      "latest": "2025-07-16"
+    }
+  },
+  "audit_trail": {
+    "case_id": "72103a09-0e3a-4b9a-8fa1-cff0b020fd08",
+    "processing_date": "2026-02-03T22:25:33.637219",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:25:33.637219",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Fraud",
+      "ai_classification_at_decision": "Fraud",
+      "ai_confidence_at_decision": 1.0,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=72103a09-0e3a-4b9a-8fa1-cff0b020fd08"
+    }
+  }
+}

@@ -16,7 +16,8 @@ try:
         TransactionData,
         CaseData,
         ExplainabilityLogger,
-        DataLoader
+        DataLoader,
+        NoTransactionsError
     )
     # If import succeeds, consider it implemented
     FOUNDATION_IMPLEMENTED = True
@@ -312,3 +313,318 @@ class TestExplainabilityLogger:
         # Cleanup
         if os.path.exists(log_file):
             os.remove(log_file)
+
+
+class TestNoTransactionsError:
+    """Test NoTransactionsError exception for customers without transactions"""
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_no_transactions_error_attributes(self):
+        """Test NoTransactionsError captures customer details"""
+        error = NoTransactionsError(
+            customer_id="CUST_0001",
+            customer_name="John Doe",
+            reason="no transactions found"
+        )
+        assert error.customer_id == "CUST_0001"
+        assert error.customer_name == "John Doe"
+        assert error.reason == "no transactions found"
+        assert "CUST_0001" in str(error)
+        assert "John Doe" in str(error)
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_dataloader_raises_no_transactions_error(self):
+        """Test DataLoader raises NoTransactionsError for customer with no transactions"""
+        logger = ExplainabilityLogger("test_no_txn.jsonl")
+        loader = DataLoader(logger)
+
+        customer_data = {
+            "customer_id": "CUST_NO_TXN",
+            "name": "No Transaction Customer",
+            "date_of_birth": "1980-01-01",
+            "ssn_last_4": "9999",
+            "address": "123 Empty St",
+            "customer_since": "2020-01-01",
+            "risk_rating": "Low",
+            "annual_income": 50000
+        }
+
+        # Account exists but no transactions
+        account_data = [{
+            "account_id": "CUST_NO_TXN_ACC_1",
+            "customer_id": "CUST_NO_TXN",
+            "account_type": "Checking",
+            "opening_date": "2020-01-01",
+            "current_balance": 1000.0,
+            "average_monthly_balance": 1000.0,
+            "status": "Active"
+        }]
+
+        # Empty transactions list
+        transaction_data = []
+
+        with pytest.raises(NoTransactionsError) as exc_info:
+            loader.create_case_from_data(customer_data, account_data, transaction_data)
+
+        assert exc_info.value.customer_id == "CUST_NO_TXN"
+        assert exc_info.value.customer_name == "No Transaction Customer"
+
+        # Cleanup
+        if os.path.exists("test_no_txn.jsonl"):
+            os.remove("test_no_txn.jsonl")
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_try_create_case_returns_none_for_no_transactions(self):
+        """Test try_create_case_from_data returns None instead of raising"""
+        logger = ExplainabilityLogger("test_try_create.jsonl")
+        loader = DataLoader(logger)
+
+        customer_data = {
+            "customer_id": "CUST_NO_TXN",
+            "name": "No Transaction Customer",
+            "date_of_birth": "1980-01-01",
+            "ssn_last_4": "9999",
+            "address": "123 Empty St",
+            "customer_since": "2020-01-01",
+            "risk_rating": "Low"
+        }
+
+        account_data = [{
+            "account_id": "CUST_NO_TXN_ACC_1",
+            "customer_id": "CUST_NO_TXN",
+            "account_type": "Checking",
+            "opening_date": "2020-01-01",
+            "current_balance": 1000.0,
+            "average_monthly_balance": 1000.0,
+            "status": "Active"
+        }]
+
+        transaction_data = []
+
+        # Should return None, not raise
+        result = loader.try_create_case_from_data(customer_data, account_data, transaction_data)
+        assert result is None
+
+        # Cleanup
+        if os.path.exists("test_try_create.jsonl"):
+            os.remove("test_try_create.jsonl")
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_try_create_case_returns_case_when_valid(self):
+        """Test try_create_case_from_data returns CaseData when transactions exist"""
+        logger = ExplainabilityLogger("test_try_create_valid.jsonl")
+        loader = DataLoader(logger)
+
+        customer_data = {
+            "customer_id": "CUST_WITH_TXN",
+            "name": "Valid Customer",
+            "date_of_birth": "1980-01-01",
+            "ssn_last_4": "1234",
+            "address": "123 Valid St",
+            "customer_since": "2020-01-01",
+            "risk_rating": "Low"
+        }
+
+        account_data = [{
+            "account_id": "CUST_WITH_TXN_ACC_1",
+            "customer_id": "CUST_WITH_TXN",
+            "account_type": "Checking",
+            "opening_date": "2020-01-01",
+            "current_balance": 5000.0,
+            "average_monthly_balance": 4000.0,
+            "status": "Active"
+        }]
+
+        transaction_data = [{
+            "transaction_id": "TXN_001",
+            "account_id": "CUST_WITH_TXN_ACC_1",
+            "transaction_date": "2025-01-01",
+            "transaction_type": "Deposit",
+            "amount": 500.0,
+            "description": "Test deposit",
+            "method": "ACH"
+        }]
+
+        result = loader.try_create_case_from_data(customer_data, account_data, transaction_data)
+        assert result is not None
+        assert isinstance(result, CaseData)
+        assert result.customer.customer_id == "CUST_WITH_TXN"
+
+        # Cleanup
+        if os.path.exists("test_try_create_valid.jsonl"):
+            os.remove("test_try_create_valid.jsonl")
+
+
+class TestBatchCaseCreation:
+    """Test batch processing of cases with mixed valid/invalid customers"""
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_create_cases_from_dataset_mixed(self):
+        """Test batch creation handles mix of customers with and without transactions"""
+        import pandas as pd
+
+        logger = ExplainabilityLogger("test_batch.jsonl")
+        loader = DataLoader(logger)
+
+        # Create test DataFrames
+        customers_df = pd.DataFrame([
+            {
+                "customer_id": "CUST_001",
+                "name": "With Transactions",
+                "date_of_birth": "1980-01-01",
+                "ssn_last_4": "1111",
+                "address": "123 Valid St",
+                "customer_since": "2020-01-01",
+                "risk_rating": "Low"
+            },
+            {
+                "customer_id": "CUST_002",
+                "name": "Without Transactions",
+                "date_of_birth": "1985-06-15",
+                "ssn_last_4": "2222",
+                "address": "456 Empty St",
+                "customer_since": "2021-01-01",
+                "risk_rating": "Medium"
+            },
+            {
+                "customer_id": "CUST_003",
+                "name": "Also With Transactions",
+                "date_of_birth": "1990-12-25",
+                "ssn_last_4": "3333",
+                "address": "789 Active St",
+                "customer_since": "2022-01-01",
+                "risk_rating": "High"
+            }
+        ])
+
+        accounts_df = pd.DataFrame([
+            {
+                "account_id": "CUST_001_ACC_1",
+                "customer_id": "CUST_001",
+                "account_type": "Checking",
+                "opening_date": "2020-01-01",
+                "current_balance": 5000.0,
+                "average_monthly_balance": 4000.0,
+                "status": "Active"
+            },
+            {
+                "account_id": "CUST_002_ACC_1",
+                "customer_id": "CUST_002",
+                "account_type": "Savings",
+                "opening_date": "2021-01-01",
+                "current_balance": 1000.0,
+                "average_monthly_balance": 1000.0,
+                "status": "Active"
+            },
+            {
+                "account_id": "CUST_003_ACC_1",
+                "customer_id": "CUST_003",
+                "account_type": "Checking",
+                "opening_date": "2022-01-01",
+                "current_balance": 10000.0,
+                "average_monthly_balance": 8000.0,
+                "status": "Active"
+            }
+        ])
+
+        # Only CUST_001 and CUST_003 have transactions
+        transactions_df = pd.DataFrame([
+            {
+                "transaction_id": "TXN_001",
+                "account_id": "CUST_001_ACC_1",
+                "transaction_date": "2025-01-01",
+                "transaction_type": "Deposit",
+                "amount": 500.0,
+                "description": "Test deposit",
+                "method": "ACH"
+            },
+            {
+                "transaction_id": "TXN_002",
+                "account_id": "CUST_003_ACC_1",
+                "transaction_date": "2025-01-02",
+                "transaction_type": "Wire_Transfer",
+                "amount": 9500.0,
+                "description": "Large wire",
+                "method": "Wire"
+            }
+        ])
+
+        result = loader.create_cases_from_dataset(customers_df, accounts_df, transactions_df)
+
+        # Check cases created
+        assert len(result['cases']) == 2
+        case_customer_ids = {c.customer.customer_id for c in result['cases']}
+        assert 'CUST_001' in case_customer_ids
+        assert 'CUST_003' in case_customer_ids
+
+        # Check skipped customers
+        assert len(result['skipped_customers']) == 1
+        assert result['skipped_customers'][0]['customer_id'] == 'CUST_002'
+        assert result['skipped_customers'][0]['customer_name'] == 'Without Transactions'
+
+        # Check statistics
+        assert result['statistics']['total_customers'] == 3
+        assert result['statistics']['cases_created'] == 2
+        assert result['statistics']['customers_skipped'] == 1
+        assert abs(result['statistics']['skip_rate'] - (1/3)) < 0.01
+
+        # Cleanup
+        if os.path.exists("test_batch.jsonl"):
+            os.remove("test_batch.jsonl")
+
+    @pytest.mark.skipif(not FOUNDATION_IMPLEMENTED, reason="Foundation not implemented yet")
+    def test_create_cases_all_skipped(self):
+        """Test batch creation when all customers have no transactions"""
+        import pandas as pd
+
+        logger = ExplainabilityLogger("test_batch_all_skip.jsonl")
+        loader = DataLoader(logger)
+
+        customers_df = pd.DataFrame([
+            {
+                "customer_id": "CUST_001",
+                "name": "Empty Customer 1",
+                "date_of_birth": "1980-01-01",
+                "ssn_last_4": "1111",
+                "address": "123 Empty St",
+                "customer_since": "2020-01-01",
+                "risk_rating": "Low"
+            },
+            {
+                "customer_id": "CUST_002",
+                "name": "Empty Customer 2",
+                "date_of_birth": "1985-06-15",
+                "ssn_last_4": "2222",
+                "address": "456 Empty St",
+                "customer_since": "2021-01-01",
+                "risk_rating": "Medium"
+            }
+        ])
+
+        accounts_df = pd.DataFrame([
+            {
+                "account_id": "CUST_001_ACC_1",
+                "customer_id": "CUST_001",
+                "account_type": "Checking",
+                "opening_date": "2020-01-01",
+                "current_balance": 5000.0,
+                "average_monthly_balance": 4000.0,
+                "status": "Active"
+            }
+        ])
+
+        # No transactions
+        transactions_df = pd.DataFrame(columns=[
+            "transaction_id", "account_id", "transaction_date",
+            "transaction_type", "amount", "description", "method"
+        ])
+
+        result = loader.create_cases_from_dataset(customers_df, accounts_df, transactions_df)
+
+        assert len(result['cases']) == 0
+        assert len(result['skipped_customers']) == 2
+        assert result['statistics']['skip_rate'] == 1.0
+
+        # Cleanup
+        if os.path.exists("test_batch_all_skip.jsonl"):
+            os.remove("test_batch_all_skip.jsonl")
