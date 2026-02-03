@@ -1,0 +1,80 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_8D568F00B8D2",
+    "filing_date": "2026-02-03T11:09:57.779279",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "d133db5457c04c4f64df31aa24453b6fe4a869d38c7f77e31dd20955cd454acd"
+  },
+  "subject_information": {
+    "customer_name": "Elijah Patton",
+    "customer_id": "CUST_0071",
+    "date_of_birth": "1967-05-03",
+    "ssn_last_4": "5040",
+    "address": "937 Derek Avenue Suite 596, Scottchester, GU 85833",
+    "customer_since": "2018-07-08",
+    "risk_rating": "High",
+    "occupation": "Health visitor",
+    "annual_income": 236808
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Elijah Patton (CUST_0071) engaged in suspicious structuring behavior by executing 68 transactions under $10,000 between February 6, 2025, and July 31, 2025. Notable transactions include $4,834.14 ATM withdrawal on March 2, $4,672.46 wire transfer on February 12, and multiple ACH credits and debits, all designed to evade currency transaction reporting thresholds. The total transaction volume is significantly high relative to his income, indicating potential attempts to conceal the source of funds. This pattern raises concerns of money laundering as it suggests an effort to avoid detection under 31 USC 5324 and 31 CFR 1020.320.",
+    "narrative_word_count": 94,
+    "key_indicators": [
+      "multiple transactions under $10,000",
+      "high transaction volume relative to income"
+    ],
+    "ai_reasoning": "The transaction history shows multiple withdrawals and deposits just under $10,000, indicating potential structuring behavior. The average monthly balance in the active accounts is significantly higher than typical for the customer's profile, which raises suspicion. Additionally, the rapid movement of funds and the high number of transactions suggest an attempt to avoid detection."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative summarizes the customer's suspicious activity, highlighting the structuring behavior and specific transactions under $10,000. It includes relevant dates, amounts, and regulatory terminology to ensure compliance with BSA/AML requirements.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0071_ACC_1",
+      "account_type": "Savings",
+      "current_balance": 81919.0,
+      "status": "Closed"
+    },
+    {
+      "account_id": "CUST_0071_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 4884.31,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0071_ACC_3",
+      "account_type": "Checking",
+      "current_balance": 39350.17,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 68,
+    "total_volume": 163147.48,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "310fc56a-fe29-4271-bfe1-1ae0ed3c767a",
+    "processing_date": "2026-02-03T11:09:57.779279",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_B88EA64EBD85",
+    "filing_date": "2026-02-03T11:09:47.557165",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "159cc87d434a50d262ac4be9407c45567f0a64f4e85b47ae2624c8458dd098d3"
+  },
+  "subject_information": {
+    "customer_name": "Cindy Clayton",
+    "customer_id": "CUST_0057",
+    "date_of_birth": "1961-08-31",
+    "ssn_last_4": "5450",
+    "address": "08330 Robert Stravenue, Garciaberg, AL 72636",
+    "customer_since": "2020-05-26",
+    "risk_rating": "High",
+    "occupation": "Applications developer",
+    "annual_income": 163820
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Cindy Clayton (CUST_0057) has engaged in suspicious activity indicative of structuring to evade currency transaction reporting thresholds. Between February 2025 and August 2025, she conducted multiple transactions under $10,000, including cash deposits and ATM withdrawals. Notably, on July 31, 2025, she made three ATM withdrawals totaling $18,906.07 and two cash deposits totaling $12,400.02, all at various branches. The rapid movement of funds and the high-risk profile further substantiate the suspicion of illicit activity. This pattern of transactions raises concerns regarding potential money laundering, necessitating a SAR filing under 31 CFR 1020.320 and 31 USC 5324.",
+    "narrative_word_count": 95,
+    "key_indicators": [
+      "multiple transactions under $10,000",
+      "high-risk customer profile"
+    ],
+    "ai_reasoning": "The customer has multiple transactions just under $10,000, particularly with cash deposits and ATM withdrawals, indicating potential structuring to evade reporting thresholds. The high-risk rating and the rapid movement of funds further support this classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative summarizes the customer's identity, suspicious activity pattern, specific transaction amounts, and the rationale for suspicion, adhering to BSA/AML requirements. It highlights the structuring behavior and cites relevant regulations.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0057_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 30581.8,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 61133.48,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 88286.77,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 101,
+    "total_volume": 286342.62,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-02"
+    }
+  },
+  "audit_trail": {
+    "case_id": "821a1bf9-9a76-4ec1-8241-42fae10cbe26",
+    "processing_date": "2026-02-03T11:09:47.557165",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services"
+  }
+}

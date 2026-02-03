@@ -12,7 +12,7 @@ openai>=1.0.0          # OpenAI API for AI agents
 python-dotenv>=1.0.0   # Environment variables
 
 # Development & Testing (Optional)
-jupyter>=1.0.0         # Notebook development
+notebook         # Notebook development
 pytest>=7.0.0          # Unit testing
 
 # Data Visualization (Optional)
