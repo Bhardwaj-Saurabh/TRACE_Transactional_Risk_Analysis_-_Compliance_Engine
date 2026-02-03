@@ -1,0 +1,91 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_FC750B84A865",
+    "filing_date": "2026-02-03T19:29:40.344098",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "2bedd996c280b18fc9c7ebafc123feb3a48ee98e1e96a23cf565fc5644326a38"
+  },
+  "subject_information": {
+    "customer_name": "Tracy Lewis",
+    "customer_id": "CUST_0053",
+    "date_of_birth": "1966-10-26",
+    "ssn_last_4": "1828",
+    "address": "8016 Nicole Stream Suite 650, Williamsside, ID 48017",
+    "customer_since": "2024-05-11",
+    "risk_rating": "Medium",
+    "occupation": "Nurse, mental health",
+    "annual_income": 131925
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.9,
+    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring, depositing $274,025.18 across 94 transactions from 2025-02-06 to 2025-07-31. Notably, seven consecutive cash deposits, each just under the $10,000 reporting threshold, were made at various branches (University District, Southpark Ave, Northgate Mall, Eastside Center, Westside Plaza) from 2025-07-25 to 2025-07-31. This pattern, indicative of structuring, violates BSA regulations and is suspicious given Lewis's medium-risk profile and high average monthly balances.",
+    "narrative_word_count": 66,
+    "key_indicators": [
+      "Multiple cash deposits just under $10,000",
+      "High average monthly balances"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a medium-risk customer with an annual income of $131,925, and three active accounts with high average monthly balances compared to the income. The transaction history shows a variety of transaction types, including cash deposits, wire transfers, and online transfers. Step 2: The pattern of cash deposits towards the end of the transaction history is suspicious. Seven consecutive cash deposits are made, each just under the $10,000 reporting threshold, within a span of seven days. This could indicate structuring, a technique used to avoid triggering mandatory reporting requirements. Step 3: Structuring is a violation of the Bank Secrecy Act (BSA), which requires financial institutions to report cash transactions over $10,000. Step 4: The risk level is high due to the clear pattern of structuring and the customer's medium-risk rating. The confidence level is also high due to the clear pattern of structuring. Step 5: The predominant pattern is structuring."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly captures all Five W's, highlighting the customer's structuring activity, the specific amounts, dates, and locations, and the reason for suspicion.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0053_ACC_1",
+      "account_type": "Money_Market",
+      "current_balance": 17676.35,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 62101.19,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 90679.35,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 94,
+    "total_volume": 274025.18,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "0b4a155f-9549-4060-8abf-f762622962f9",
+    "processing_date": "2026-02-03T19:29:40.344098",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "auto_approve",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:29:29.848158+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve",
+      "reviewer_decision": "yes (auto-approved)",
+      "rationale": "Approved by auto_approve - AI classification: Structuring (confidence: 0.90)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.9,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=0b4a155f-9549-4060-8abf-f762622962f9"
+    }
+  }
+}

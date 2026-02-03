@@ -213,7 +213,9 @@ class ComplianceOfficerOutput(BaseModel):
     narrative: str = Field(..., max_length=1000, description="Regulatory narrative text")
     narrative_reasoning: str = Field(..., max_length=500, description="Reasoning for narrative construction")
     regulatory_citations: List[str] = Field(..., description="List of relevant regulations")
-    completeness_check: bool = Field(..., description="Whether narrative meets all requirements")
+    completeness_check: bool = Field(..., description="Whether narrative meets all requirements (model self-reported, not trusted)")
+    validation_passed: Optional[bool] = Field(None, description="Whether narrative passed deterministic pre-finalization validation")
+    validation_details: Optional[Dict[str, Any]] = Field(None, description="Detailed validation results for audit trail")
 
 
 # ===== AUDIT LOGGING =====
@@ -244,6 +246,64 @@ class ExplainabilityLogger:
         self.entries.append(entry)
         with open(self.log_file, 'a') as f:
             f.write(json.dumps(entry) + '\n')
+
+    def log_human_decision(self, case_id: str, customer_id: str, customer_name: str,
+                          decision: str, reviewer_decision: str, reviewer_identity: str,
+                          ai_classification: str, ai_confidence: float, ai_risk_level: str,
+                          rationale: Optional[str] = None, sar_id: Optional[str] = None,
+                          decision_file: str = "workflow_decisions.jsonl"):
+        """Log human decision gate outcome in structured format for regulatory examination.
+        
+        Args:
+            case_id: Unique case identifier
+            customer_id: Customer identifier
+            customer_name: Customer name
+            decision: Decision outcome ('PROCEED', 'REJECT', 'ERROR')
+            reviewer_decision: Raw reviewer input/decision text
+            reviewer_identity: Identity of reviewer (e.g., 'compliance_officer', 'auto_approve')
+            ai_classification: AI classification result
+            ai_confidence: AI confidence score
+            ai_risk_level: AI risk level assessment
+            rationale: Optional rationale for decision
+            sar_id: SAR ID if SAR was created (for linking)
+            decision_file: Path to decision log file
+        """
+        entry = {
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'case_id': case_id,
+            'customer_id': customer_id,
+            'customer_name': customer_name,
+            'decision': decision,  # 'PROCEED', 'REJECT', 'ERROR'
+            'reviewer_decision': reviewer_decision,  # Raw decision text
+            'reviewer_identity': reviewer_identity,  # Who made the decision
+            'ai_classification': ai_classification,
+            'ai_confidence': ai_confidence,
+            'ai_risk_level': ai_risk_level,
+            'rationale': rationale or f"{decision} decision by {reviewer_identity}",
+            'sar_id': sar_id,  # Link to SAR if created
+            'log_type': 'human_decision_gate'
+        }
+        
+        # Write immediately to ensure every decision is captured
+        if os.path.isabs(decision_file):
+            decision_path = decision_file
+        else:
+            # If log_file has a directory, use that; otherwise use outputs/audit_logs
+            log_dir = os.path.dirname(self.log_file)
+            if log_dir:
+                decision_path = os.path.join(log_dir, decision_file)
+            else:
+                decision_path = os.path.join("outputs/audit_logs", decision_file)
+        
+        # Ensure directory exists
+        decision_dir = os.path.dirname(decision_path)
+        if decision_dir:
+            os.makedirs(decision_dir, exist_ok=True)
+        
+        with open(decision_path, 'a') as f:
+            f.write(json.dumps(entry) + '\n')
+        
+        return entry
 
 
 # ===== DATA LOADER =====

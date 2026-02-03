@@ -1,0 +1,92 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_B674D448BA70",
+    "filing_date": "2026-02-03T19:38:53.125579",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "ce0cb5f8652994493c7d5927bde82310569fbb68b9e7e4acc1625af9f1e1f095"
+  },
+  "subject_information": {
+    "customer_name": "Jacqueline Rodriguez",
+    "customer_id": "CUST_0111",
+    "date_of_birth": "2001-02-01",
+    "ssn_last_4": "9067",
+    "address": "49331 Lewis Views Apt. 516, Lake Maryshire, DE 59549",
+    "customer_since": "2022-02-27",
+    "risk_rating": "High",
+    "occupation": "Conservation officer, historic buildings",
+    "annual_income": 306379
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.8,
+    "narrative": "From 2025-02-05 to 2025-08-01, Jacqueline Rodriguez (CUST_0111) conducted 121 transactions totaling $386,834.91, exceeding her annual income. Transactions occurred at multiple branches including Westside Plaza and Financial District, and via various methods such as wire transfers and check deposits. A large incoming wire transfer of $76,517.25 on 2025-07-29 was followed by rapid outgoing transfers, suggesting money laundering. This activity, coupled with her high-risk rating, indicates a potential violation of BSA/AML regulations.",
+    "narrative_word_count": 70,
+    "key_indicators": [
+      "High transaction volume",
+      "Rapid movement of funds",
+      "High risk customer rating"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high risk rating and the customer's annual income is $306,379. However, the average monthly transaction volume across all accounts is significantly higher than the customer's income. The customer has also been involved in a large number of transactions (121) within a short period of time. Step 2: The transaction history shows a large incoming wire transfer of $76,517.25 followed by multiple outgoing wire transfers in quick succession. This pattern suggests rapid movement of funds, which is a common indicator of money laundering. Step 3: This pattern of behavior could potentially violate the Bank Secrecy Act (BSA), which requires financial institutions to assist U.S. government agencies in detecting and preventing money laundering. Step 4: The risk level is high due to the high volume of transactions, the customer's high risk rating, and the suspicious pattern of transactions. Step 5: The predominant pattern is consistent with money laundering, hence the classification decision."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly captures all Five W's, highlighting the customer's suspicious activity, the locations, methods, and timeframe of transactions, and the reasoning for suspicion.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0111_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 41311.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_2",
+      "account_type": "Checking",
+      "current_balance": 92858.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_3",
+      "account_type": "Savings",
+      "current_balance": 2343.44,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 121,
+    "total_volume": 386834.91000000003,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-01"
+    }
+  },
+  "audit_trail": {
+    "case_id": "d9d1ec8c-7538-4fe1-9c77-1c33bc2f7c65",
+    "processing_date": "2026-02-03T19:38:53.125579",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "auto_approve",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:38:44.057529+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve",
+      "reviewer_decision": "yes (auto-approved)",
+      "rationale": "Approved by auto_approve - AI classification: Money_Laundering (confidence: 0.80)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.8,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=d9d1ec8c-7538-4fe1-9c77-1c33bc2f7c65"
+    }
+  }
+}

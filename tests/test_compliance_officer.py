@@ -393,7 +393,18 @@ This completes the analysis.'''
         mock_client = Mock()
         mock_response = Mock()
         mock_response.choices = [Mock()]
-        mock_response.choices[0].message.content = '''{"narrative": "Test narrative", "narrative_reasoning": "Test", "regulatory_citations": ["Test"], "completeness_check": true}'''
+        # Create a valid narrative that passes validation (includes Five W's, dollar amounts, valid citations)
+        valid_narrative = (
+            "API Test (CUST_API) conducted cash deposits totaling $1,000.00 "
+            "at Branch_Test on 2025-01-01. This activity is suspicious as it "
+            "appears designed to evade BSA reporting requirements under 31 CFR 1020.320."
+        )
+        mock_response.choices[0].message.content = f'''{{
+            "narrative": "{valid_narrative}",
+            "narrative_reasoning": "Test reasoning for API parameters",
+            "regulatory_citations": ["31 CFR 1020.320", "31 USC 5324"],
+            "completeness_check": true
+        }}'''
         mock_client.chat.completions.create.return_value = mock_response
         
         logger = ExplainabilityLogger("test_api_compliance.jsonl")

@@ -196,14 +196,104 @@ You MUST respond with ONLY a JSON object in this exact format:
                     messages.append({"role": "assistant", "content": "I'll regenerate the narrative addressing the validation issues."})
                     messages.append({"role": "user", "content": regeneration_prompt})
 
-                response = self.client.chat.completions.create(
-                    model=self.model,
-                    messages=messages,
-                    temperature=0.2 + (attempt * 0.1),  # Slightly increase temperature on retries
-                    max_tokens=800
-                )
+                # Make API call with error handling
+                try:
+                    response = self.client.chat.completions.create(
+                        model=self.model,
+                        messages=messages,
+                        temperature=0.2 + (attempt * 0.1),  # Slightly increase temperature on retries
+                        max_tokens=800
+                    )
 
-                response_content = response.choices[0].message.content
+                    if not response.choices or not response.choices[0].message.content:
+                        raise ValueError("Empty response from API")
+
+                    response_content = response.choices[0].message.content
+                except openai.RateLimitError as e:
+                    error_msg = f"Rate limit exceeded: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="API rate limit exceeded",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+                except openai.APITimeoutError as e:
+                    error_msg = f"API timeout: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="API timeout",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+                except openai.APIConnectionError as e:
+                    error_msg = f"API connection error: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="API connection failed",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+                except openai.BadRequestError as e:
+                    error_msg = f"Bad request: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="API bad request (e.g., insufficient budget)",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+                except openai.AuthenticationError as e:
+                    error_msg = f"Authentication failed: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="API authentication failed",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+                except openai.APIError as e:
+                    error_msg = f"OpenAI API error: {e}"
+                    self.logger.log_agent_action(
+                        agent_type="ComplianceOfficer",
+                        action="generate_narrative",
+                        case_id=case_data.case_id,
+                        input_data={"customer_id": case_data.customer.customer_id, "attempt": attempt + 1},
+                        output_data={},
+                        reasoning="OpenAI API error",
+                        execution_time_ms=(datetime.now() - start_time).total_seconds() * 1000,
+                        success=False,
+                        error_message=error_msg
+                    )
+                    raise ValueError(error_msg)
+
                 json_str = self._extract_json_from_response(response_content)
                 parsed = json.loads(json_str)
 
@@ -220,8 +310,12 @@ You MUST respond with ONLY a JSON object in this exact format:
                 )
 
                 if validation_result["can_finalize"]:
-                    # Validation passed - create and return result
-                    result = ComplianceOfficerOutput(**parsed)
+                    # Validation passed - create and return result with validation status
+                    result = ComplianceOfficerOutput(
+                        **parsed,
+                        validation_passed=True,
+                        validation_details=validation_result
+                    )
 
                     execution_time_ms = (datetime.now() - start_time).total_seconds() * 1000
                     self.logger.log_agent_action(
@@ -283,12 +377,18 @@ You MUST respond with ONLY a JSON object in this exact format:
                     success=False,
                     error_message=error_msg
                 )
-                if "exceeds 120 word limit" in error_msg:
-                    raise
+                # Check if this is a word count violation - raise ValueError specifically
+                if "exceeds 120 word limit" in error_msg or "word limit" in error_msg.lower():
+                    raise ValueError(f"Narrative exceeds 120 word limit")
                 raise ValueError(f"Failed to parse Compliance Officer JSON output: {e}")
 
         # All attempts exhausted - validation still failing
         if strict_validation and last_validation_result:
+            # Check if word count is the primary issue - raise ValueError for word count violations
+            if "word_count" in last_validation_result.get('failed_checks', []):
+                word_count = last_validation_result.get('word_count', 'unknown')
+                raise ValueError(f"Narrative exceeds 120 word limit ({word_count} words)")
+            
             error_message = (
                 f"Narrative validation failed after {max_regeneration_attempts + 1} attempts. "
                 f"Failed checks: {', '.join(last_validation_result['failed_checks'])}. "
@@ -297,7 +397,12 @@ You MUST respond with ONLY a JSON object in this exact format:
             raise NarrativeValidationError(error_message, last_validation_result)
 
         # If not strict, return with validation warnings (not recommended for production)
-        return ComplianceOfficerOutput(**parsed)
+        # Mark validation as failed so SAR creation can block approval
+        return ComplianceOfficerOutput(
+            **parsed,
+            validation_passed=False,
+            validation_details=last_validation_result or {}
+        )
 
     def _build_regeneration_prompt(self, validation_result: Dict[str, Any]) -> str:
         """Build a prompt for regeneration based on validation failures."""

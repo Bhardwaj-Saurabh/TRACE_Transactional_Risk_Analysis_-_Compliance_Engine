@@ -1,0 +1,93 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_575CB156548F",
+    "filing_date": "2026-02-03T19:28:39.069931",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "2b9e66d74abcd0bf60321a6a0ac23c6db90c1f3b25f218dcd0d9a4b430e0dc41"
+  },
+  "subject_information": {
+    "customer_name": "Elijah Patton",
+    "customer_id": "CUST_0071",
+    "date_of_birth": "1967-05-03",
+    "ssn_last_4": "5040",
+    "address": "937 Derek Avenue Suite 596, Scottchester, GU 85833",
+    "customer_since": "2018-07-08",
+    "risk_rating": "High",
+    "occupation": "Health visitor",
+    "annual_income": 236808
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Elijah Patton (CUST_0071) engaged in potential money laundering from 2025-02-06 to 2025-07-31, conducting 68 transactions totaling $163,147.48 across multiple branches. Transactions included ATM withdrawals, wire transfers, and ACH debits, inconsistent with Patton's occupation. Activity patterns suggest an attempt to obscure funds' origin, violating BSA requirements.",
+    "narrative_word_count": 45,
+    "key_indicators": [
+      "High risk rating",
+      "High account balances",
+      "High volume of transactions",
+      "Inconsistency between income and account activity"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high risk rating and an annual income of $236,808. The customer has three accounts, two of which are active with high balances and average monthly transactions. The customer has made a total of 68 transactions with a total volume of $163,147.48. Step 2: There are several large transactions, including ATM withdrawals and wire transfers, which are inconsistent with the customer's occupation as a health visitor. The average monthly transactions in the savings and checking accounts are significantly higher than the customer's annual income. Step 3: The identified patterns map to money laundering typologies, where funds are moved around to obscure their origin. This is in violation of the Bank Secrecy Act (BSA) which requires banks to report suspicious transactions that could signify money laundering. Step 4: The risk level is high due to the high volume of transactions, the customer's high risk rating, and the inconsistency between the customer's income and account activity. Step 5: The predominant pattern is consistent with money laundering."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's: WHO (Elijah Patton), WHAT (money laundering), WHEN (2025-02-06 to 2025-07-31), WHERE (multiple branches), and WHY (inconsistent transactions, violation of BSA). It also references the total transaction amount and number.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0071_ACC_1",
+      "account_type": "Savings",
+      "current_balance": 81919.0,
+      "status": "Closed"
+    },
+    {
+      "account_id": "CUST_0071_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 4884.31,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0071_ACC_3",
+      "account_type": "Checking",
+      "current_balance": 39350.17,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 68,
+    "total_volume": 163147.47999999998,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "b1e34fb3-28a5-47eb-8e3c-ffdc002dff26",
+    "processing_date": "2026-02-03T19:28:39.069931",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:28:31.059661+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Money_Laundering (confidence: 0.85)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=b1e34fb3-28a5-47eb-8e3c-ffdc002dff26"
+    }
+  }
+}

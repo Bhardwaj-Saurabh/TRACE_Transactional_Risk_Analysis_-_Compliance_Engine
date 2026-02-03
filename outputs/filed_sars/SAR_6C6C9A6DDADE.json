@@ -1,0 +1,93 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_6C6C9A6DDADE",
+    "filing_date": "2026-02-03T19:36:46.657545",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "a7d4030e746fc807b9900c0c0c11f1a61ca02579ddd9baa039a5196a87162688"
+  },
+  "subject_information": {
+    "customer_name": "Jacqueline Rodriguez",
+    "customer_id": "CUST_0111",
+    "date_of_birth": "2001-02-01",
+    "ssn_last_4": "9067",
+    "address": "49331 Lewis Views Apt. 516, Lake Maryshire, DE 59549",
+    "customer_since": "2022-02-27",
+    "risk_rating": "High",
+    "occupation": "Conservation officer, historic buildings",
+    "annual_income": 306379
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.8,
+    "narrative": "Between 2025-02-05 and 2025-08-01, Jacqueline Rodriguez (CUST_0111) conducted 121 transactions totaling $386,834.91 across multiple branches and channels, including Branch_Westside_Plaza and Branch_Downtown_Main. This activity, inconsistent with her conservation officer profile, included large, frequent wire transfers, notably a $76,517.25 incoming wire transfer and several outgoing transfers exceeding $10,000. The transaction volume significantly exceeds her reported annual income of $306,379, suggesting potential money laundering.",
+    "narrative_word_count": 61,
+    "key_indicators": [
+      "High risk rating",
+      "High transaction volume compared to income",
+      "Large and frequent wire transfers"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high risk rating. The customer has an annual income of $306,379 but the total transaction volume is $386,834.91, which is significantly higher than the annual income. The customer also has three active accounts with high balances and high average monthly transactions. Step 2: There are several large wire transfers, including an incoming wire transfer of $76,517.25 and several outgoing wire transfers of over $10,000. These transactions are not consistent with the customer's occupation as a conservation officer for historic buildings. Step 3: The large and frequent transactions, inconsistent with the customer's profile, map to potential money laundering activities as defined by the Bank Secrecy Act (BSA) and USA PATRIOT Act. Step 4: The risk level is high due to the high risk rating of the customer, the high transaction volume compared to the income, and the large and frequent wire transfers. Step 5: The predominant pattern is consistent with money laundering."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324",
+      "FinCEN SAR Instructions"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly captures all Five W's, highlighting the customer's suspicious activity, the discrepancy between her income and transaction volume, and the potential violation of BSA/AML regulations.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0111_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 41311.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_2",
+      "account_type": "Checking",
+      "current_balance": 92858.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_3",
+      "account_type": "Savings",
+      "current_balance": 2343.44,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 121,
+    "total_volume": 386834.91000000003,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-01"
+    }
+  },
+  "audit_trail": {
+    "case_id": "b30c51fc-7043-46ec-911d-2be2e1957f8f",
+    "processing_date": "2026-02-03T19:36:46.657545",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:36:30.658975+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Money_Laundering (confidence: 0.80)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.8,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=b30c51fc-7043-46ec-911d-2be2e1957f8f"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_9B8834B70978",
+    "filing_date": "2026-02-03T19:28:15.528902",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "2338966811f3c283381fae52b90a7b0086d83470f12aac480384143a8f6a29bd"
+  },
+  "subject_information": {
+    "customer_name": "Cindy Clayton",
+    "customer_id": "CUST_0057",
+    "date_of_birth": "1961-08-31",
+    "ssn_last_4": "5450",
+    "address": "08330 Robert Stravenue, Garciaberg, AL 72636",
+    "customer_since": "2020-05-26",
+    "risk_rating": "High",
+    "occupation": "Applications developer",
+    "annual_income": 163820
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "High-risk customer Cindy Clayton (CUST_0057) engaged in structuring from 2025-02-05 to 2025-08-02, totaling $286,342.62 across 101 transactions. Transactions occurred at multiple branches including Branch_Downtown_Main and Branch_University_District. Clayton made large ATM withdrawals and cash deposits, often close to $10,000, indicative of structuring to avoid BSA reporting thresholds.",
+    "narrative_word_count": 46,
+    "key_indicators": [
+      "High-risk customer",
+      "High volume of transactions",
+      "Large ATM withdrawals and cash deposits",
+      "Transactions close to $10,000"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high-risk rating with a high annual income. The account balances and average monthly balances are significantly high, indicating a high volume of transactions. Step 2: The transaction history shows a pattern of multiple ATM withdrawals and cash deposits in large amounts, especially towards the end of the provided transaction list. These transactions are close to but do not exceed $10,000, suggesting a possible attempt to avoid reporting thresholds. Step 3: This pattern aligns with the structuring typology, where multiple transactions are made to avoid the $10,000 reporting threshold under the Bank Secrecy Act (BSA). Step 4: The risk level is high due to the high volume of transactions and the customer's high-risk rating. The confidence level is also high due to the clear pattern of structuring. Step 5: The predominant pattern is structuring, leading to this classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324",
+      "FinCEN SAR Instructions"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's. It identifies the customer and suspicious activity (structuring), specifies the time period and amount, mentions transaction locations, and explains the reason for suspicion (transactions close to $10,000).",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0057_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 30581.8,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 61133.48,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 88286.77,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 101,
+    "total_volume": 286342.62,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-02"
+    }
+  },
+  "audit_trail": {
+    "case_id": "8bc93f97-7d8f-4124-a509-044ec40efbfa",
+    "processing_date": "2026-02-03T19:28:15.528902",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:28:06.799395+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=8bc93f97-7d8f-4124-a509-044ec40efbfa"
+    }
+  }
+}
