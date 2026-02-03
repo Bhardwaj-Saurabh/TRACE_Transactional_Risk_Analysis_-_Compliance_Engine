@@ -1,0 +1,81 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_F320139BF092",
+    "filing_date": "2026-02-03T12:00:48.075092",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "fb77e4070311f242aee0e84887d82a0eac897c404fe83bb87a832293a5ad1f95"
+  },
+  "subject_information": {
+    "customer_name": "Cindy Clayton",
+    "customer_id": "CUST_0057",
+    "date_of_birth": "1961-08-31",
+    "ssn_last_4": "5450",
+    "address": "08330 Robert Stravenue, Garciaberg, AL 72636",
+    "customer_since": "2020-05-26",
+    "risk_rating": "High",
+    "occupation": "Applications developer",
+    "annual_income": 163820
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Cindy Clayton (CUST_0057) exhibited potential structuring activity. Large, rapid ATM transactions were observed between 2025-07-31 and 2025-08-02, including withdrawals of $5,100.37, $4,340.55, $5,774.15, and $7,491.44, and cash deposits of $5,500.55 and $6,933.66. These transactions, coupled with disproportionate account balances, suggest an attempt to evade currency transaction reporting thresholds.",
+    "narrative_word_count": 48,
+    "key_indicators": [
+      "High risk rating",
+      "Large, rapid ATM transactions",
+      "Disproportionate account balances"
+    ],
+    "ai_reasoning": "Customer has high risk rating. Multiple large ATM withdrawals and cash deposits in short time period (transactions 61-66, 64-65) suggest potential structuring activity. Average monthly balances significantly exceed annual income."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly identifies the customer, describes the suspicious activity pattern (structuring), includes specific transaction amounts and dates, and explains why the activity is suspicious. It uses proper BSA/AML compliance terminology and is within the 120-word limit.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0057_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 30581.8,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 61133.48,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 88286.77,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 101,
+    "total_volume": 286342.61999999994,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-02"
+    }
+  },
+  "audit_trail": {
+    "case_id": "0c31620a-0ae3-4985-8f96-4fda10b17655",
+    "processing_date": "2026-02-03T12:00:48.075092",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services"
+  }
+}

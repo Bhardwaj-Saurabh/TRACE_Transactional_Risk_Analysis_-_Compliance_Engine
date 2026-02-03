@@ -12,38 +12,15 @@ from datetime import datetime
 try:
     from src.foundation_sar import (
         CustomerData,
-        AccountData, 
+        AccountData,
         TransactionData,
         CaseData,
         ExplainabilityLogger,
         DataLoader
     )
-    
-    # Test if classes are actually implemented (not just empty pass statements)
-    try:
-        # Check if CustomerData has proper fields defined, not just an empty pass
-        # If the class is just "pass", it won't have any model fields
-        if hasattr(CustomerData, 'model_fields') and CustomerData.model_fields:
-            # Try to create a simple instance to see if it's properly implemented
-            test_customer = CustomerData(
-                customer_id="TEST", 
-                name="Test", 
-                date_of_birth="1990-01-01",
-                ssn_last_4="1234",
-                address="123 Test St",
-                customer_since="2020-01-01",
-                risk_rating="Low", 
-                annual_income=50000
-            )
-            # If we get here, the implementation exists and works
-            FOUNDATION_IMPLEMENTED = True
-        else:
-            # No model fields defined - just empty pass statements
-            FOUNDATION_IMPLEMENTED = False
-    except Exception as e:
-        # Any error means implementation is incomplete
-        FOUNDATION_IMPLEMENTED = False
-        
+    # If import succeeds, consider it implemented
+    FOUNDATION_IMPLEMENTED = True
+
 except ImportError:
     # Graceful fallback when students haven't implemented yet
     FOUNDATION_IMPLEMENTED = False
