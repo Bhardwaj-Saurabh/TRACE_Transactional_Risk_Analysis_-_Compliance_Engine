@@ -198,7 +198,6 @@ class ComplianceOfficerAgent:
         self.client = openai_client
         self.logger = explainability_logger
         self.model = model
-
         self.system_prompt = """You are a Senior Compliance Officer specializing in BSA/AML regulatory compliance and SAR narrative generation for FinCEN submission.
 
 Use the ReACT (REASONING + Action) framework to generate regulatory-compliant SAR narratives.
@@ -224,69 +223,41 @@ The narrative MUST include ALL FIVE elements:
    - Customer name and ID
    - Account number(s) involved
 
-2. **WHAT** - Suspicious activity description:
-   - Type of suspicious activity (structuring, money laundering, fraud, etc.)
-   - Specific transaction types involved
-   - Total amounts and individual transaction amounts
+2. **WHAT** - Nature of suspicious activity:
+   - Classification type (e.g., "structuring," "money laundering")
+   - Transaction types (cash, wire, ACH)
+   - Specific amounts (e.g., "$9,800 cash deposit")
 
-3. **WHEN** - Temporal details:
-   - Specific transaction dates
-   - Time period/pattern of activity (e.g., "over three consecutive days")
+3. **WHEN** - Time period:
+   - Start and end dates (e.g., "between January 1-15, 2025")
+   - Frequency if relevant
 
-4. **WHERE** - Location/channel information:
-   - Transaction locations (branch names, ATM locations, online)
+4. **WHERE** - Location/channel:
+   - Branch locations, ATM locations, or online channel
    - Geographic information if relevant
-   - Transaction channels/methods (cash, wire, ACH, etc.)
 
-5. **WHY** - Reason for suspicion:
-   - Clear explanation of why the activity is suspicious
-   - Reference to regulatory thresholds violated
-   - Connection to known suspicious patterns
+5. **WHY** - Suspicion basis:
+   - Key indicators from Risk Analyst
+   - Pattern or behavior that triggered alert
+   - Deviation from expected behavior
 
-**CRITICAL - Typology-Specific Citation Requirements:**
+**Regulatory Citations:**
+You MUST include at least ONE citation that is DIRECTLY RELEVANT to the narrative content:
 
-⚠️ VALIDATION FAILURE WARNING: Citing regulations that don't match your narrative will cause validation failure and require regeneration.
+**General BSA/AML Citations** (use for all typologies):
+- 31 CFR 1020.320 (SAR reporting requirement)
+- 31 USC 5318(g) (BSA suspicious activity reporting)
 
-**Structuring cases** - Transactions broken into smaller amounts to evade $10,000 CTR threshold:
-✅ MUST cite: 31 USC 5324 (anti-structuring statute) OR 31 CFR 1010.314 (structuring regulations)
-✅ May cite: 31 CFR 1020.320 (SAR filing), 31 USC 5313 (CTR requirements), FinCEN SAR Instructions
-📝 Example: "Four cash deposits of $9,900 each over three days at different branches to avoid CTR reporting."
+**Typology-Specific Citations** (use ONLY when the narrative describes the specific violation):
+- **Structuring ONLY**: 31 USC 5324 (prohibition against structuring) - USE ONLY if narrative describes transactions specifically designed to evade CTR threshold
+- **Money Laundering**: 18 USC 1956 (money laundering) or 18 USC 1957 (monetary transactions in property derived from unlawful activity)
+- **Fraud**: 18 USC 1343 (wire fraud) or 18 USC 1344 (bank fraud)
+- **Sanctions**: OFAC sanctions regulations (specify which sanctions program if known, e.g., "OFAC Iran Sanctions")
 
-**Money_Laundering cases** - Layering, integration, or obscuring origin of funds:
-✅ MUST cite: 31 USC 5318 (AML program) OR 18 USC 1956 (money laundering) OR 18 USC 1957 (monetary transactions)
-✅ May cite: 31 CFR 1020.320 (SAR filing), FinCEN Advisory, FinCEN Guidance, BSA, AML
-❌ DO NOT cite: 31 USC 5324 (structuring statute) - ONLY use if narrative explicitly describes structuring/threshold evasion
-📝 Example: "Large incoming wire transfer followed by rapid outbound transfers to multiple accounts - indicative of layering."
-📝 Example where 31 USC 5324 IS appropriate: "Wire transfers followed by multiple cash withdrawals under $10,000 to evade CTR reporting."
-
-**Sanctions cases** - Transactions involving prohibited parties/jurisdictions:
-✅ MUST cite: OFAC SDN List OR Executive Order 13599 OR North Korea Sanctions Regulations OR Iran Sanctions
-✅ May cite: 31 CFR 1020.320 (SAR filing), FinCEN SAR Instructions
-❌ DO NOT cite: 31 USC 5324 (structuring), 31 CFR 1010.314 (structuring)
-📝 Example: "Wire transfer to entity matching OFAC SDN List entry."
-
-**Fraud cases** - Identity theft, account takeover, deceptive practices:
-✅ MUST cite: FTC Red Flags Rule OR 31 CFR 1020.320 (SAR filing) OR FinCEN SAR Instructions
-✅ May cite: BSA, AML
-❌ DO NOT cite: OFAC SDN List, Executive Order 13599, 31 USC 5324 (structuring)
-📝 Example: "Account takeover with fraudulent wire transfers to overseas accounts."
-
-**Other cases** - Suspicious activity not fitting standard typologies:
-✅ MUST cite: 31 CFR 1020.320 (SAR filing) OR FinCEN SAR Instructions OR BSA
-✅ May cite: FinCEN Advisory, AML
-📝 Example: "Unusual transaction pattern not consistent with known typologies."
-
-**Citation Selection Checklist (Review Before Finalizing):**
-1. ✅ Does your narrative describe structuring? If NO, do not cite 31 USC 5324 or 31 CFR 1010.314
-2. ✅ Does your narrative describe layering/wire transfers/fund movement? If YES, cite AML statutes (18 USC 1956/1957, 31 USC 5318)
-3. ✅ Does your narrative mention OFAC/sanctions/prohibited parties? If NO, do not cite OFAC authorities
-4. ✅ Does your narrative describe fraud/identity theft? If NO, do not cite FTC Red Flags Rule
-5. ✅ Always include general SAR filing authority: 31 CFR 1020.320 or FinCEN SAR Instructions
-
-**Additional Requirements:**
-- Maximum 120 words — this is a strict limit
-- Must use proper BSA/AML compliance terminology
-- Must reference applicable FinCEN SAR filing requirements
+**CRITICAL CITATION RULES:**
+- DO NOT cite 31 USC 5324 for Money_Laundering, Fraud, or Sanctions cases
+- DO NOT cite money laundering statutes for Structuring cases
+- READ YOUR NARRATIVE and verify each citation matches the facts you described
 - Citations must match the facts in your narrative - READ YOUR NARRATIVE and verify citation relevance
 
 **Output Format:**
@@ -297,6 +268,50 @@ You MUST respond with ONLY a JSON object in this exact format:
     "regulatory_citations": ["citation relevant to classification type", "other relevant citations"],
     "completeness_check": true or false (true ONLY if all Five W's are present)
 }"""
+
+    def _calculate_cost(self, usage_metrics: Dict[str, Any]) -> float:
+        """Calculate cost in USD based on model and token usage.
+
+        Uses current OpenAI pricing (as of Jan 2025):
+        - gpt-4: $0.03/1K prompt tokens, $0.06/1K completion tokens
+        - gpt-4-turbo: $0.01/1K prompt tokens, $0.03/1K completion tokens
+        - gpt-4o: $0.0025/1K prompt tokens, $0.01/1K completion tokens
+        - gpt-4o-mini: $0.00015/1K prompt tokens, $0.0006/1K completion tokens
+        - gpt-3.5-turbo: $0.0005/1K prompt tokens, $0.0015/1K completion tokens
+
+        Args:
+            usage_metrics: Dict containing prompt_tokens, completion_tokens, total_tokens
+
+        Returns:
+            Estimated cost in USD
+        """
+        if not usage_metrics:
+            return 0.0
+
+        try:
+            prompt_tokens = int(usage_metrics.get('prompt_tokens', 0))
+            completion_tokens = int(usage_metrics.get('completion_tokens', 0))
+        except (ValueError, TypeError):
+            # Handle cases where tokens are not valid integers (e.g., Mock objects in tests)
+            return 0.0
+
+        # Model pricing (per 1000 tokens)
+        pricing = {
+            'gpt-4': {'prompt': 0.03, 'completion': 0.06},
+            'gpt-4-turbo': {'prompt': 0.01, 'completion': 0.03},
+            'gpt-4-turbo-preview': {'prompt': 0.01, 'completion': 0.03},
+            'gpt-4o': {'prompt': 0.0025, 'completion': 0.01},
+            'gpt-4o-mini': {'prompt': 0.00015, 'completion': 0.0006},
+            'gpt-3.5-turbo': {'prompt': 0.0005, 'completion': 0.0015},
+        }
+
+        # Default pricing if model not found (use gpt-4 as conservative estimate)
+        model_pricing = pricing.get(self.model, pricing['gpt-4'])
+
+        prompt_cost = (prompt_tokens / 1000) * model_pricing['prompt']
+        completion_cost = (completion_tokens / 1000) * model_pricing['completion']
+
+        return prompt_cost + completion_cost
 
     def generate_compliance_narrative(self, case_data, risk_analysis,
                                         max_regeneration_attempts: int = 2,
@@ -357,6 +372,15 @@ You MUST respond with ONLY a JSON object in this exact format:
                         raise ValueError("Empty response from API")
 
                     response_content = response.choices[0].message.content
+
+                    # Extract token usage from response
+                    usage_metrics = {}
+                    if hasattr(response, 'usage') and response.usage:
+                        usage_metrics = {
+                            'prompt_tokens': response.usage.prompt_tokens,
+                            'completion_tokens': response.usage.completion_tokens,
+                            'total_tokens': response.usage.total_tokens
+                        }
                 except openai.RateLimitError as e:
                     error_msg = f"Rate limit exceeded: {e}"
                     self.logger.log_agent_action(
@@ -467,24 +491,36 @@ You MUST respond with ONLY a JSON object in this exact format:
                     )
 
                     execution_time_ms = (datetime.now() - start_time).total_seconds() * 1000
-                    self.logger.log_agent_action(
-                        agent_type="ComplianceOfficer",
-                        action="generate_narrative",
-                        case_id=case_data.case_id,
-                        input_data={
+
+                    # Calculate cost based on token usage
+                    cost_usd = self._calculate_cost(usage_metrics)
+
+                    # Only pass token_usage if it has valid data
+                    log_kwargs = {
+                        "agent_type": "ComplianceOfficer",
+                        "action": "generate_narrative",
+                        "case_id": case_data.case_id,
+                        "input_data": {
                             "customer_id": case_data.customer.customer_id,
                             "classification": risk_analysis.classification,
                             "attempts": attempt + 1
                         },
-                        output_data={
+                        "output_data": {
                             **parsed,
                             "validation_passed": True,
                             "validation_details": validation_result
                         },
-                        reasoning=result.narrative_reasoning,
-                        execution_time_ms=execution_time_ms,
-                        success=True
-                    )
+                        "reasoning": result.narrative_reasoning,
+                        "execution_time_ms": execution_time_ms,
+                        "success": True
+                    }
+
+                    # Only add token_usage and cost if we have valid data
+                    if usage_metrics and all(isinstance(usage_metrics.get(k), int) for k in ['prompt_tokens', 'completion_tokens', 'total_tokens'] if k in usage_metrics):
+                        log_kwargs["token_usage"] = usage_metrics
+                        log_kwargs["cost_usd"] = cost_usd
+
+                    self.logger.log_agent_action(**log_kwargs)
                     return result
 
                 # Validation failed - store result and potentially retry

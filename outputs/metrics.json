@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "generated_at": "2026-02-04T09:56:59.666399",
+    "audit_log_path": "outputs\\audit_logs\\workflow_integration.jsonl",
+    "total_entries": 209,
+    "successful_entries": 191
+  },
+  "overall": {
+    "total_operations": 191,
+    "execution_time_ms": {
+      "mean": 5674.273816753926,
+      "median": 6551.477,
+      "p95": 14242.4535,
+      "min": 0.0,
+      "max": 20589.548
+    },
+    "token_usage": {
+      "total_prompt_tokens": 0,
+      "total_completion_tokens": 0,
+      "total_tokens": 0,
+      "mean_prompt_tokens": 0,
+      "mean_completion_tokens": 0,
+      "mean_total_tokens": 0
+    },
+    "cost_usd": {
+      "total": 0,
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0
+    }
+  },
+  "by_agent": {
+    "RiskAnalyst": {
+      "operations": 64,
+      "execution_time_ms": {
+        "mean": 8870.77,
+        "median": 9304.42,
+        "p95": 18586.05,
+        "min": 3031.62,
+        "max": 20589.55
+      },
+      "token_usage": {
+        "total_prompt_tokens": 0,
+        "total_completion_tokens": 0,
+        "total_tokens": 0,
+        "mean_prompt_tokens": 0,
+        "mean_completion_tokens": 0,
+        "mean_total_tokens": 0
+      },
+      "cost_usd": {
+        "total": 0,
+        "mean": 0,
+        "median": 0,
+        "per_operation": 0.0
+      }
+    },
+    "ComplianceOfficer": {
+      "operations": 55,
+      "execution_time_ms": {
+        "mean": 9381.65,
+        "median": 8490.19,
+        "p95": 15421.53,
+        "min": 5337.2,
+        "max": 18981.61
+      },
+      "token_usage": {
+        "total_prompt_tokens": 0,
+        "total_completion_tokens": 0,
+        "total_tokens": 0,
+        "mean_prompt_tokens": 0,
+        "mean_completion_tokens": 0,
+        "mean_total_tokens": 0
+      },
+      "cost_usd": {
+        "total": 0,
+        "mean": 0,
+        "median": 0,
+        "per_operation": 0.0
+      }
+    }
+  },
+  "cost_breakdown": {
+    "total_cost_usd": 0,
+    "risk_analyst_cost_usd": 0,
+    "compliance_officer_cost_usd": 0,
+    "risk_analyst_percentage": 0,
+    "compliance_officer_percentage": 0,
+    "cost_per_sar": 0
+  },
+  "performance_comparison": {
+    "total_pipeline_time_ms": 18252.42,
+    "risk_analysis_time_ms": 8870.77,
+    "compliance_time_ms": 9381.65,
+    "risk_analysis_percentage": 48.6,
+    "compliance_percentage": 51.4,
+    "stage_1_vs_stage_2_cost_delta_usd": 0,
+    "stage_1_cost_usd": 0,
+    "stage_2_cost_usd": 0
+  }
+}

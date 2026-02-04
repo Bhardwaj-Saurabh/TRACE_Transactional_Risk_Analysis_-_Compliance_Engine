@@ -1,0 +1,92 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_D23603218C8E",
+    "filing_date": "2026-02-03T19:10:15.995396",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "876f49e130b1b90d7fa9aed6c82826c203af1258b2925d36f601724300cef3e5"
+  },
+  "subject_information": {
+    "customer_name": "Cindy Clayton",
+    "customer_id": "CUST_0057",
+    "date_of_birth": "1961-08-31",
+    "ssn_last_4": "5450",
+    "address": "08330 Robert Stravenue, Garciaberg, AL 72636",
+    "customer_since": "2020-05-26",
+    "risk_rating": "High",
+    "occupation": "Applications developer",
+    "annual_income": 163820
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Cindy Clayton (CUST_0057) engaged in structuring from 2025-02-05 to 2025-08-02, totaling $286,342.62 across 101 transactions. Transactions occurred at multiple branches including Downtown_Main, Suburban_Center, University_District, Eastside_Center, and Southpark_Ave. Clayton's high-risk rating, high transaction volume, and large cash transactions suggest an attempt to avoid BSA reporting requirements for transactions over $10,000.",
+    "narrative_word_count": 49,
+    "key_indicators": [
+      "High risk rating",
+      "High transaction volume",
+      "Large cash transactions"
+    ],
+    "ai_reasoning": "Step 1: The customer has a high risk rating and a high annual income. The average monthly balance in each of her accounts is significantly higher than the current balance. The customer has a high volume of transactions, many of which are large. Step 2: There are several large ATM withdrawals and cash deposits in a short period of time, which could indicate structuring. Step 3: Structuring is a method used to avoid BSA reporting requirements, which mandate that transactions over $10,000 be reported. Step 4: The risk level is high due to the large transaction amounts and the high frequency of cash transactions. Step 5: The predominant pattern is structuring, as the customer appears to be making large cash transactions in a manner that could be designed to avoid reporting requirements."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly identifies the customer, describes the suspicious activity, provides the timeframe, lists transaction locations, and explains the reason for suspicion, adhering to the Five W's framework.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0057_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 30581.8,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 61133.48,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 88286.77,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 101,
+    "total_volume": 286342.61999999994,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-02"
+    }
+  },
+  "audit_trail": {
+    "case_id": "36bd4dd6-21dc-4444-99a5-db14b4e736d6",
+    "processing_date": "2026-02-03T19:10:15.995396",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:10:01.600060+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=36bd4dd6-21dc-4444-99a5-db14b4e736d6"
+    }
+  }
+}

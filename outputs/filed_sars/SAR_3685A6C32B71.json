@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "204d55e772cfb04d8b8c141a35e1a4bbb7887510d7b0ccbcb5e50df28b773e07",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Fraud"
+    "classification_coverage_test": "Fraud",
+    "last_updated": "2026-02-04T10:12:36.179416",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Marcus Thompson",
@@ -36,7 +41,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "FTC Red Flags Rule",
+      "FinCEN SAR Instructions"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative includes all Five W's, uses regulatory language, and references specific transactions, amounts, and dates to illustrate the suspicious activity.",

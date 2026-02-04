@@ -230,7 +230,24 @@ class ExplainabilityLogger:
     def log_agent_action(self, agent_type: str, action: str, case_id: str,
                          input_data: Dict, output_data: Dict, reasoning: str,
                          execution_time_ms: float, success: bool = True,
-                         error_message: Optional[str] = None):
+                         error_message: Optional[str] = None,
+                         token_usage: Optional[Dict[str, int]] = None,
+                         cost_usd: Optional[float] = None):
+        """Log agent action with performance and cost metrics.
+
+        Args:
+            agent_type: Type of agent (e.g., 'RiskAnalyst', 'ComplianceOfficer')
+            action: Action performed (e.g., 'analyze_case', 'generate_narrative')
+            case_id: Case identifier
+            input_data: Input data summary
+            output_data: Output data summary
+            reasoning: Agent reasoning/explanation
+            execution_time_ms: Execution time in milliseconds
+            success: Whether action succeeded
+            error_message: Error message if failed
+            token_usage: Dict with prompt_tokens, completion_tokens, total_tokens
+            cost_usd: Estimated cost in USD
+        """
         entry = {
             'timestamp': datetime.now(timezone.utc).isoformat(),
             'case_id': case_id,
@@ -243,6 +260,13 @@ class ExplainabilityLogger:
             'success': success,
             'error_message': error_message
         }
+
+        # Add token usage and cost if available
+        if token_usage:
+            entry['token_usage'] = token_usage
+        if cost_usd is not None:
+            entry['cost_usd'] = round(cost_usd, 6)  # 6 decimal places for precision
+
         self.entries.append(entry)
         with open(self.log_file, 'a') as f:
             f.write(json.dumps(entry) + '\n')

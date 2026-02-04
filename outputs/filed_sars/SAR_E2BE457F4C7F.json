@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "82ef313a6a2fc77e8e39952b9ef9d96ea0bdece915acc432bad41391fc2db2dc"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.369837",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Jacqueline Rodriguez",
@@ -34,8 +39,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324",
-      "USA PATRIOT Act"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting key suspicious activities, locations, and the customer's high-risk profile. It references the specific pattern of large, rapid wire transfers, indicative of money laundering.",

@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "a7d4030e746fc807b9900c0c0c11f1a61ca02579ddd9baa039a5196a87162688"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.215984",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Jacqueline Rodriguez",
@@ -34,8 +39,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324",
-      "FinCEN SAR Instructions"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly captures all Five W's, highlighting the customer's suspicious activity, the discrepancy between her income and transaction volume, and the potential violation of BSA/AML regulations.",

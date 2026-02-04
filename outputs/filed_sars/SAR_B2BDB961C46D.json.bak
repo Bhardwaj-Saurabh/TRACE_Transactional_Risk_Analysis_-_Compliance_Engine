@@ -1,0 +1,88 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_B2BDB961C46D",
+    "filing_date": "2026-02-03T12:02:13.013391",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "ad023b64f3d6bd93d26bd4bcdf06ee94ed1c52094bad68fc6bcefd2788ab75dd"
+  },
+  "subject_information": {
+    "customer_name": "Tanya Johnston",
+    "customer_id": "CUST_0018",
+    "date_of_birth": "2001-10-15",
+    "ssn_last_4": "7149",
+    "address": "93149 Laura Port, West Amandastad, CA 66818",
+    "customer_since": "2019-10-08",
+    "risk_rating": "High",
+    "occupation": "Therapist, drama",
+    "annual_income": 166876
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Tanya Johnston (CUST_0018) exhibited a pattern of structuring, depositing cash amounts just below the $10,000 reporting threshold. From 2025-07-22 to 2025-07-25, she made consecutive daily deposits of $9,576.59, $9,530.63, $9,274.89, and $9,154.34 at different branches. This activity, coupled with her high-risk rating, suggests an attempt to evade regulatory reporting, violating 31 USC 5324.",
+    "narrative_word_count": 53,
+    "key_indicators": [
+      "Multiple cash deposits under $10,000",
+      "Deposits made at different branches",
+      "Consecutive daily deposits"
+    ],
+    "ai_reasoning": "Customer has made multiple cash deposits just under $10,000 (structuring) in different branches over consecutive days, possibly to avoid triggering regulatory reporting."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly identifies the customer, describes the suspicious activity pattern, includes specific transaction amounts and dates, and explains why the activity is suspicious, using proper BSA/AML compliance terminology.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0018_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 29518.74,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0018_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 70384.37,
+      "status": "Closed"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 54,
+    "total_volume": 150758.53,
+    "date_range": {
+      "earliest": "2025-02-08",
+      "latest": "2025-07-27"
+    }
+  },
+  "audit_trail": {
+    "case_id": "5e6c52c9-565c-4414-9012-37dba1349c80",
+    "processing_date": "2026-02-03T12:02:13.013391",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T12:02:13.013391",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes (backfilled - SAR was previously filed)",
+      "rationale": "BACKFILLED: SAR was filed without complete decision gate record. AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=5e6c52c9-565c-4414-9012-37dba1349c80",
+      "backfilled": true,
+      "backfill_timestamp": "2026-02-03T22:59:37.130768+00:00"
+    }
+  }
+}

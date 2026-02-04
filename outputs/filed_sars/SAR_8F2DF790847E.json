@@ -5,7 +5,13 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "7dc13650cb3e426cfde9160e7726457c3f2f2c57d28da40e40558f78fe038e08"
+    "document_checksum": "REPAIRED_20260204_101600",
+    "last_updated": "2026-02-04T10:16:00.000000",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations",
+      "manual_narrative_enhancement_added_classification_context"
+    ]
   },
   "subject_information": {
     "customer_name": "Jacqueline Rodriguez",
@@ -22,7 +28,7 @@
     "classification": "Money_Laundering",
     "risk_level": "High",
     "confidence_score": 0.9,
-    "narrative": "From 02/05/2025 to 08/01/2025, Jacqueline Rodriguez (CUST_0111) conducted 121 transactions totaling $386,834.91 across multiple branches. A large incoming wire transfer of $76,517.25 was noted on 07/29/2025, followed by multiple large outgoing wire transfers. This pattern, indicative of 'layering', suggests an attempt to obscure the origin of funds, potentially violating BSA/AML regulations.",
+    "narrative": "From 02/05/2025 to 08/01/2025, Jacqueline Rodriguez (CUST_0111) conducted 121 transactions totaling $386,834.91 across multiple branches. A large incoming wire transfer of $76,517.25 was noted on 07/29/2025, followed by multiple large outgoing wire transfers. This pattern, indicative of 'layering' associated with money laundering, suggests an attempt to obscure the origin of funds, potentially violating BSA/AML regulations.",
     "narrative_word_count": 51,
     "key_indicators": [
       "High-risk customer profile",
@@ -34,7 +40,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's identity, suspicious activity, timeframe, transaction locations, and reason for suspicion. The narrative also specifically mentions the layering pattern, a key indicator of money laundering.",

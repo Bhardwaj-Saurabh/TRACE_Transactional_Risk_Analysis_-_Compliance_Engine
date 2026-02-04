@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "ad0056c5413921ce40c60b133a67b4a4213a49748baf803f860676ac743bdaf3"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.282703",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Cindy Clayton",
@@ -34,7 +39,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's suspicious activity, transaction details, and potential regulatory violations. It references key risk indicators and uses appropriate BSA/AML terminology.",

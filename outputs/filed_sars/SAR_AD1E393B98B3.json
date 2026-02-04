@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "1350b1de11899f214aea0be39cb9923a7aab13f25ce1fe37325025469686edf2"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.267580",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tracy Lewis",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring activity totaling $274,025.18 across 94 transactions from 2025-02-06 to 2025-07-31. Transactions occurred at multiple branches including Airport_Terminal, Downtown_Main, University_District, Suburban_Center, Eastside_Center. A pattern of daily cash deposits just under $10,000 was observed towards the end of July 2025, indicative of structuring to evade BSA's $10,000 reporting threshold. The account activity significantly exceeded Lewis's income as a mental health nurse, further raising suspicion.",
-    "narrative_word_count": 68,
+    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring activity totaling $274,025.18 across 94 transactions from 2025-02-06 to 2025-07-31. Transactions occurred at multiple branches including Airport_Terminal, Downtown_Main, University_District, Suburban_Center, Eastside_Center at multiple branch locations. A pattern of daily cash deposits just under $10,000 was observed towards the end of July 2025, indicative of structuring to evade BSA's $10,000 reporting threshold. The account activity significantly exceeded Lewis's income as a mental health nurse, further raising suspicion.",
+    "narrative_word_count": 72,
     "key_indicators": [
       "Cash deposits just under $10,000",
       "Discrepancy between income and account activity"

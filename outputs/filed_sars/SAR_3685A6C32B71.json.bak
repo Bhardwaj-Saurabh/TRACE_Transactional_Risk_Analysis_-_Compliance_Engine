@@ -1,0 +1,82 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_3685A6C32B71",
+    "filing_date": "2026-02-03T22:28:48.112176",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "204d55e772cfb04d8b8c141a35e1a4bbb7887510d7b0ccbcb5e50df28b773e07",
+    "test_scenario": true,
+    "classification_coverage_test": "Fraud"
+  },
+  "subject_information": {
+    "customer_name": "Marcus Thompson",
+    "customer_id": "CUST_FRAUD_TEST",
+    "date_of_birth": "1978-03-15",
+    "ssn_last_4": "4521",
+    "address": "892 Oak Street, Denver, CO 80205",
+    "customer_since": "2018-05-20",
+    "risk_rating": "Low",
+    "occupation": "Software Engineer",
+    "annual_income": 125000
+  },
+  "suspicious_activity": {
+    "classification": "Fraud",
+    "risk_level": "High",
+    "confidence_score": 0.95,
+    "narrative": "Marcus Thompson (CUST_FRAUD_TEST), a low-risk software engineer, engaged in suspicious activity from 2025-07-01 to 2025-07-16. Seven transactions totaling $-37,456.78 were flagged as fraud. Notably, on 2025-07-15, unauthorized wire transfers of $15,000, $12,000, and $8,500 were conducted from an Online_Foreign_IP, followed by a $2,000 ATM withdrawal at ATM_Miami_FL. This pattern, including rapid, consecutive transactions, suggests account takeover, a violation of BSA regulations.",
+    "narrative_word_count": 61,
+    "key_indicators": [
+      "Unauthorized wire transfers",
+      "ATM withdrawal from unusual location",
+      "Rapid, consecutive transactions"
+    ],
+    "ai_reasoning": "Step 1: The data review shows that the customer is a software engineer with a low risk rating and an annual income of $125,000. The customer's account has been suspended due to suspicious activity. Step 2: The pattern recognition reveals multiple unauthorized wire transfers and an ATM withdrawal from an unusual location, all of which suggest fraudulent activity. Step 3: The identified patterns map to known financial crime typologies of account takeover and unauthorized access, which are violations of the Bank Secrecy Act (BSA). Step 4: The risk level is high due to the large amounts of money involved in the unauthorized transactions and the rapid, consecutive nature of these transactions. Step 5: The predominant pattern is fraudulent activity, specifically account takeover and unauthorized access, leading to the classification decision of 'Fraud'."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative includes all Five W's, uses regulatory language, and references specific transactions, amounts, and dates to illustrate the suspicious activity.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_FRAUD_TEST_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 2500.0,
+      "status": "Suspended"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 7,
+    "total_volume": 47856.78,
+    "date_range": {
+      "earliest": "2025-07-01",
+      "latest": "2025-07-16"
+    }
+  },
+  "audit_trail": {
+    "case_id": "78ab3795-e6b5-422b-ab81-157f26f5459e",
+    "processing_date": "2026-02-03T22:28:48.112176",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:28:48.112176",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Fraud",
+      "ai_classification_at_decision": "Fraud",
+      "ai_confidence_at_decision": 0.95,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=78ab3795-e6b5-422b-ab81-157f26f5459e"
+    }
+  }
+}

@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "229633b830d60511ec5d8c4527da2ee3dfc45c0e031700b26e7ce2983ebab9e0",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Structuring"
+    "classification_coverage_test": "Structuring",
+    "last_updated": "2026-02-04T10:12:36.225061",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Jennifer Walsh",
@@ -24,8 +29,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.9,
-    "narrative": "Jennifer Walsh (CUST_STRUCT_TEST), a medium-risk restaurant owner, made six cash deposits totaling $58,400 from 2025-07-01 to 2025-07-07 at Branch_Phoenix_Main, Branch_Phoenix_East, and Branch_Phoenix_West. Each deposit was under $10,000, a pattern indicative of structuring to avoid BSA's $10,000 reporting threshold. This suspicious activity, coupled with her cash-intensive business, raises the risk level to high.",
-    "narrative_word_count": 52,
+    "narrative": "Jennifer Walsh (CUST_STRUCT_TEST), a medium-risk restaurant owner, made six cash deposits totaling $58,400 from 2025-07-01 to 2025-07-07 at Branch_Phoenix_Main, Branch_Phoenix_East, and Branch_Phoenix_West. Each deposit was under $10,000, a pattern indicative of structuring to avoid BSA's $10,000 reporting threshold at multiple branch locations. This suspicious activity, coupled with her cash-intensive business, raises the risk level to high.",
+    "narrative_word_count": 56,
     "key_indicators": [
       "Multiple deposits just under $10,000",
       "Cash-based business owner"

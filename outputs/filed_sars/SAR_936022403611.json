@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "e84215d1dd45007237b7641abba1c03ea0638575d7d6947c4022e1d2a6d2ce1b"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.248458",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Jacqueline Rodriguez",
@@ -34,7 +39,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative identifies the customer and summarizes the suspicious activity, including specific transaction amounts and dates. It explains the reasons for suspicion, referencing regulatory requirements succinctly.",

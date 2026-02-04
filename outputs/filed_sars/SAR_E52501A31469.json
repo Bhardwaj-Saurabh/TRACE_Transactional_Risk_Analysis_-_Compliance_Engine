@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "351b2756ad47e3edf1f246ad75574bc93a2f169c319a9e05269dfe2dac154a4a",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Fraud"
+    "classification_coverage_test": "Fraud",
+    "last_updated": "2026-02-04T10:12:36.375071",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Marcus Thompson",
@@ -37,7 +42,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "FTC Red Flags Rule",
+      "FinCEN SAR Instructions"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the customer's identity, suspicious activity, timeframe, locations/methods, and reason for suspicion. It emphasizes the unauthorized transactions and account takeover pattern.",

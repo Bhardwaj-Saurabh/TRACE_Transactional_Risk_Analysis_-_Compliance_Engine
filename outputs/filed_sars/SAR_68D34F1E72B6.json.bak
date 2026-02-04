@@ -1,0 +1,85 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_68D34F1E72B6",
+    "filing_date": "2026-02-03T22:26:28.137434",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "97a3c641eda442c260c5cedfcab35b102a5829a360f3dac4a708d1d6896779d5",
+    "test_scenario": true,
+    "classification_coverage_test": "Money_Laundering"
+  },
+  "subject_information": {
+    "customer_name": "Robert Chen",
+    "customer_id": "CUST_ML_TEST",
+    "date_of_birth": "1970-04-08",
+    "ssn_last_4": "6147",
+    "address": "8800 Wilshire Blvd, Suite 400, Beverly Hills, CA 90211",
+    "customer_since": "2023-06-01",
+    "risk_rating": "High",
+    "occupation": "Real Estate Investor",
+    "annual_income": 85000
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.95,
+    "narrative": "Robert Chen (CUST_ML_TEST) engaged in suspicious activity suggestive of money laundering from 2025-06-01 to 2025-06-20. Six transactions totaling $280,000 were conducted via domestic and international wires, and check deposit at Branch_Beverly_Hills. Activity included large incoming wires from unclear sources, transfers to shell companies, and a real estate purchase. The pattern, involving high volumes, offshore transactions, and transactions with shell companies, is consistent with money laundering typologies under BSA and USA PATRIOT Act.",
+    "narrative_word_count": 72,
+    "key_indicators": [
+      "High risk customer",
+      "Large transaction volumes",
+      "Offshore transactions",
+      "Transactions with shell companies",
+      "Real estate purchase"
+    ],
+    "ai_reasoning": "Step 1: The customer's profile shows a high risk rating and an occupation in real estate. The account balance and average monthly balance are significantly higher than the customer's reported annual income. The transactions involve large sums of money, with unclear sources and destinations, and include offshore and shell companies. Step 2: The pattern of transactions suggests money laundering activities. There are incoming wires from unclear sources, transfers to shell companies, and a real estate purchase that could serve as a method of integrating illicit funds into the legitimate economy. The third-party check deposit could be an example of smurfing, a form of structuring. Step 3: The identified patterns map to money laundering typologies under the BSA and USA PATRIOT Act, which require financial institutions to report suspicious activity that may involve money laundering. Step 4: The risk is high due to the large sums of money involved, the high risk rating of the customer, and the strong indicators of money laundering. Step 5: The predominant pattern is money laundering, as the transactions suggest efforts to obscure the source of funds, layer transactions through various entities, and integrate funds through a real estate purchase."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324",
+      "USA PATRIOT Act"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the customer's suspicious activity, transaction details, and the reasoning behind the suspicion, while referencing relevant regulations.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_ML_TEST_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 425000.0,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 6,
+    "total_volume": 770000.0,
+    "date_range": {
+      "earliest": "2025-06-01",
+      "latest": "2025-06-20"
+    }
+  },
+  "audit_trail": {
+    "case_id": "ff1e8a99-7396-488a-a8ab-b3bd82f3d5f1",
+    "processing_date": "2026-02-03T22:26:28.137434",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:26:28.137434",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Money_Laundering",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.95,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=ff1e8a99-7396-488a-a8ab-b3bd82f3d5f1"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_936022403611",
+    "filing_date": "2026-02-03T11:09:36.566569",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "e84215d1dd45007237b7641abba1c03ea0638575d7d6947c4022e1d2a6d2ce1b"
+  },
+  "subject_information": {
+    "customer_name": "Jacqueline Rodriguez",
+    "customer_id": "CUST_0111",
+    "date_of_birth": "2001-02-01",
+    "ssn_last_4": "9067",
+    "address": "49331 Lewis Views Apt. 516, Lake Maryshire, DE 59549",
+    "customer_since": "2022-02-27",
+    "risk_rating": "High",
+    "occupation": "Conservation officer, historic buildings",
+    "annual_income": 306379
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Jacqueline Rodriguez (CUST_0111), a high-risk customer, engaged in suspicious activity indicative of money laundering. On 2025-07-29, she received a wire transfer of $76,517.25, followed by multiple outgoing wire transfers exceeding $10,000 on 2025-07-31 ($14,019.62, $8,906.70, and $13,901.49). The rapid movement of funds and high average monthly balances across her accounts do not align with her stated income or occupation. This pattern suggests potential layering of illicit funds, warranting further investigation under 31 CFR 1020.320 and 31 USC 5324.",
+    "narrative_word_count": 78,
+    "key_indicators": [
+      "Multiple large outgoing wire transfers",
+      "High average monthly balances",
+      "Rapid movement of funds"
+    ],
+    "ai_reasoning": "The customer has a high-risk profile with significant transaction volumes, including multiple large outgoing wire transfers (e.g., $76,517.25 incoming and several outgoing over $10,000). The rapid movement of funds and the high average monthly balances across accounts suggest potential layering of illicit funds. Additionally, the nature of the transactions does not align with the customer's occupation or income level."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative identifies the customer and summarizes the suspicious activity, including specific transaction amounts and dates. It explains the reasons for suspicion, referencing regulatory requirements succinctly.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0111_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 41311.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_2",
+      "account_type": "Checking",
+      "current_balance": 92858.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_3",
+      "account_type": "Savings",
+      "current_balance": 2343.44,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 121,
+    "total_volume": 386834.91,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-01"
+    }
+  },
+  "audit_trail": {
+    "case_id": "b28ae5ab-fea0-4643-ab11-e4aa1d6ce7b8",
+    "processing_date": "2026-02-03T11:09:36.566569",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T11:09:36.566569",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes (backfilled - SAR was previously filed)",
+      "rationale": "BACKFILLED: SAR was filed without complete decision gate record. AI classification: Money_Laundering (confidence: 0.85)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=b28ae5ab-fea0-4643-ab11-e4aa1d6ce7b8",
+      "backfilled": true,
+      "backfill_timestamp": "2026-02-03T22:59:37.128745+00:00"
+    }
+  }
+}

@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "394aa54b9c858d320773fa7609e28489c02be1fbcd35229bda6eeefefd51acde"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.261371",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Jacqueline Rodriguez",
@@ -34,8 +39,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324",
-      "FinCEN SAR Instructions"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly identifies the customer, describes the suspicious activity pattern, includes specific transaction amounts and dates, and explains why the activity is suspicious, using proper BSA/AML compliance terminology.",

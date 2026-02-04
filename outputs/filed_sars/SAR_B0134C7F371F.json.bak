@@ -1,0 +1,92 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_B0134C7F371F",
+    "filing_date": "2026-02-03T19:24:09.083010",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "ad0056c5413921ce40c60b133a67b4a4213a49748baf803f860676ac743bdaf3"
+  },
+  "subject_information": {
+    "customer_name": "Cindy Clayton",
+    "customer_id": "CUST_0057",
+    "date_of_birth": "1961-08-31",
+    "ssn_last_4": "5450",
+    "address": "08330 Robert Stravenue, Garciaberg, AL 72636",
+    "customer_since": "2020-05-26",
+    "risk_rating": "High",
+    "occupation": "Applications developer",
+    "annual_income": 163820
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Cindy Clayton (CUST_0057) engaged in suspicious activity consistent with money laundering from 2025-02-05 to 2025-08-02. She conducted 101 transactions totaling $286,342.62 across multiple branches including Suburban Center, University District, Eastside Center, Downtown Main, and Southpark Ave. Notably, she made frequent large ATM withdrawals and deposits, especially towards the end of the period, with amounts exceeding $5,000, potentially obscuring fund sources and destinations. This activity, coupled with her high-risk customer profile, violates BSA/AML regulations.",
+    "narrative_word_count": 73,
+    "key_indicators": [
+      "High-risk customer profile",
+      "High transaction volume",
+      "Frequent large ATM withdrawals and deposits"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high-risk rating with an annual income of $163,820. The customer has three active accounts with high balances and average monthly transactions. The transaction history shows a high volume of transactions, with a total transaction volume of $286,342.62 across 101 transactions. Step 2: The transaction pattern shows a high frequency of ATM withdrawals and deposits, particularly in the last few days of the transaction history, with amounts exceeding $5,000. This could indicate an attempt to obscure the source and destination of funds. Step 3: This pattern is consistent with money laundering typologies, where illicit funds are integrated into the financial system through a series of complex transactions. This potentially violates the Bank Secrecy Act (BSA) and anti-money laundering (AML) regulations. Step 4: The risk level is high due to the high-risk customer profile, high transaction volume, and suspicious transaction pattern. Step 5: The predominant pattern is consistent with money laundering."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's suspicious activity, transaction details, and potential regulatory violations. It references key risk indicators and uses appropriate BSA/AML terminology.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0057_ACC_1",
+      "account_type": "Checking",
+      "current_balance": 30581.8,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 61133.48,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0057_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 88286.77,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 101,
+    "total_volume": 286342.62,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-02"
+    }
+  },
+  "audit_trail": {
+    "case_id": "7477e0df-6eec-4cf2-bf06-ebc5baf23659",
+    "processing_date": "2026-02-03T19:24:09.083010",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:23:53.175703+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Money_Laundering (confidence: 0.85)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=7477e0df-6eec-4cf2-bf06-ebc5baf23659"
+    }
+  }
+}

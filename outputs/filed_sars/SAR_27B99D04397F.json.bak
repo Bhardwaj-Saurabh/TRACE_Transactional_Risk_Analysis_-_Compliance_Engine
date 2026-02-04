@@ -1,0 +1,86 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_27B99D04397F",
+    "filing_date": "2026-02-03T19:22:37.576186",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "8adf6267c712ba3d722e251d29f7766938c3eadf38fd6a432a25be36a64d0103"
+  },
+  "subject_information": {
+    "customer_name": "Tanya Johnston",
+    "customer_id": "CUST_0018",
+    "date_of_birth": "2001-10-15",
+    "ssn_last_4": "7149",
+    "address": "93149 Laura Port, West Amandastad, CA 66818",
+    "customer_since": "2019-10-08",
+    "risk_rating": "High",
+    "occupation": "Therapist, drama",
+    "annual_income": 166876
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.9,
+    "narrative": "Tanya Johnston (CUST_0018) engaged in structuring from 2025-02-08 to 2025-07-27, totaling $150,758.53 across 54 transactions. Notably, cash deposits just under $10,000 were made at multiple branches including Branch_Airport_Terminal and Branch_Westside_Plaza. This activity, inconsistent with her occupation, is indicative of structuring, a method to evade the $10,000 BSA reporting threshold, thus violating 31 USC 5324.",
+    "narrative_word_count": 54,
+    "key_indicators": [
+      "High-risk customer profile",
+      "Cash deposits just under $10,000",
+      "Inconsistent occupation and transaction volume"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high-risk rating and the occupation does not match the high transaction volume. The customer has made multiple cash deposits that are just under the $10,000 reporting threshold. Step 2: The pattern of cash deposits just under the reporting threshold is consistent with structuring, a method used to avoid detection by authorities. Step 3: Structuring is a violation of the Bank Secrecy Act (BSA), which requires financial institutions to report cash transactions over $10,000. Step 4: The risk is high due to the high-risk customer profile, the pattern of structuring, and the violation of BSA regulations. Step 5: The predominant pattern is structuring, therefore the classification is 'Structuring'."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the customer's suspicious activity, the timeframe, the locations involved, and the reason for suspicion, while adhering to the 120-word limit.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0018_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 29518.74,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0018_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 70384.37,
+      "status": "Closed"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 54,
+    "total_volume": 150758.52999999994,
+    "date_range": {
+      "earliest": "2025-02-08",
+      "latest": "2025-07-27"
+    }
+  },
+  "audit_trail": {
+    "case_id": "eea55b05-2deb-42c8-aa36-5a6b9c6a3201",
+    "processing_date": "2026-02-03T19:22:37.576186",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:22:31.518163+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Structuring (confidence: 0.90)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.9,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=eea55b05-2deb-42c8-aa36-5a6b9c6a3201"
+    }
+  }
+}

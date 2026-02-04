@@ -1,0 +1,86 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_8C36B16144BE",
+    "filing_date": "2026-02-03T19:35:58.676144",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "38e759a486c9a4c7cb2bc6d9114089f74a4fbd3cd07f73ea86cc2c6e58e53d6f"
+  },
+  "subject_information": {
+    "customer_name": "Tanya Johnston",
+    "customer_id": "CUST_0018",
+    "date_of_birth": "2001-10-15",
+    "ssn_last_4": "7149",
+    "address": "93149 Laura Port, West Amandastad, CA 66818",
+    "customer_since": "2019-10-08",
+    "risk_rating": "High",
+    "occupation": "Therapist, drama",
+    "annual_income": 166876
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Tanya Johnston (CUST_0018) engaged in structuring from 2025-02-08 to 2025-07-27, depositing $150,758.53 across 54 transactions. Notably, cash deposits just under $10,000 were made at Branch_Westside_Plaza and Branch_Downtown_Main on 2025-07-22 and 2025-07-23 respectively. This activity, significantly exceeding her annual income, occurred across multiple branches, including Branch_University_District and Branch_Airport_Terminal. The pattern of deposits just under the BSA's $10,000 reporting threshold indicates an attempt to evade detection, warranting a high risk level.",
+    "narrative_word_count": 69,
+    "key_indicators": [
+      "High risk rating",
+      "Cash deposits just under $10,000",
+      "Average monthly balance significantly higher than annual income"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows that the customer is a drama therapist with a high risk rating. The customer has two accounts, one of which is closed. The customer's annual income is $166,876, but the average monthly balance of the accounts is significantly higher than this. The customer has made several cash deposits that are just under the $10,000 reporting threshold. Step 2: The pattern of cash deposits just under the $10,000 reporting threshold is suspicious and indicative of structuring. Step 3: Structuring is a method used to avoid the reporting requirements of the Bank Secrecy Act (BSA). The BSA requires financial institutions to report cash transactions over $10,000. By making multiple deposits just under this threshold, the customer may be attempting to avoid these reporting requirements. Step 4: The risk level is high due to the pattern of structuring and the customer's high risk rating. Step 5: The predominant pattern is structuring, so the final classification is structuring."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly captures all Five W's, highlighting the customer's structuring activity, the specific transactions, and the branches involved. It also explains the suspicious nature of the activity, referencing the BSA's reporting threshold.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0018_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 29518.74,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0018_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 70384.37,
+      "status": "Closed"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 54,
+    "total_volume": 150758.52999999994,
+    "date_range": {
+      "earliest": "2025-02-08",
+      "latest": "2025-07-27"
+    }
+  },
+  "audit_trail": {
+    "case_id": "c4c76177-d6ee-4cf9-9d5f-6104a3ef73bf",
+    "processing_date": "2026-02-03T19:35:58.676144",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:35:39.690972+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=c4c76177-d6ee-4cf9-9d5f-6104a3ef73bf"
+    }
+  }
+}

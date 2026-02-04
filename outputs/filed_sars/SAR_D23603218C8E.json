@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "876f49e130b1b90d7fa9aed6c82826c203af1258b2925d36f601724300cef3e5"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.322198",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Cindy Clayton",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Cindy Clayton (CUST_0057) engaged in structuring from 2025-02-05 to 2025-08-02, totaling $286,342.62 across 101 transactions. Transactions occurred at multiple branches including Downtown_Main, Suburban_Center, University_District, Eastside_Center, and Southpark_Ave. Clayton's high-risk rating, high transaction volume, and large cash transactions suggest an attempt to avoid BSA reporting requirements for transactions over $10,000.",
-    "narrative_word_count": 49,
+    "narrative": "Cindy Clayton (CUST_0057) engaged in structuring from 2025-02-05 to 2025-08-02, totaling $286,342.62 across 101 transactions. Transactions occurred at multiple branches including Downtown_Main, Suburban_Center, University_District, Eastside_Center, and Southpark_Ave at multiple branch locations. Clayton's high-risk rating, high transaction volume, and large cash transactions suggest an attempt to avoid BSA reporting requirements for transactions over $10,000.",
+    "narrative_word_count": 53,
     "key_indicators": [
       "High risk rating",
       "High transaction volume",

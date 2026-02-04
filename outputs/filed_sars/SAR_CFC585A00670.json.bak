@@ -1,0 +1,91 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_CFC585A00670",
+    "filing_date": "2026-02-03T19:38:32.189189",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "c33e203e3dc4dac4d97b78752de07871e6fc08830120b74afcf87586060f635a"
+  },
+  "subject_information": {
+    "customer_name": "Tracy Lewis",
+    "customer_id": "CUST_0053",
+    "date_of_birth": "1966-10-26",
+    "ssn_last_4": "1828",
+    "address": "8016 Nicole Stream Suite 650, Williamsside, ID 48017",
+    "customer_since": "2024-05-11",
+    "risk_rating": "Medium",
+    "occupation": "Nurse, mental health",
+    "annual_income": 131925
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.95,
+    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring from 2025-02-06 to 2025-07-31, totaling $274,025.18 across 94 transactions. Notably, consecutive cash deposits just under $10,000 occurred from 2025-07-25 to 2025-07-31 at various branches. This activity, inconsistent with Lewis's income, is indicative of attempts to evade BSA reporting thresholds.",
+    "narrative_word_count": 45,
+    "key_indicators": [
+      "Multiple cash deposits just under $10,000",
+      "High account balances inconsistent with income"
+    ],
+    "ai_reasoning": "Step 1: The customer, Tracy Lewis, is a nurse with an annual income of $131,925. She has three active accounts with high average monthly balances, which are not consistent with her income. Step 2: There are multiple cash deposits just under $10,000 made on consecutive days (transactions 71 to 77). This is a common pattern of structuring, where transactions are designed to avoid reporting thresholds. Step 3: Structuring is a violation of the Bank Secrecy Act (BSA), which requires financial institutions to report cash transactions over $10,000. Step 4: The risk level is high due to the clear pattern of structuring and the inconsistency between the customer's income and account balances. Step 5: The predominant pattern is structuring, so that is the final classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly identifies the customer (WHO), describes the suspicious activity (WHAT), specifies the time period (WHEN), mentions transaction locations (WHERE), and explains the reason for suspicion (WHY). It adheres to the 120-word limit and uses appropriate BSA/AML terminology.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0053_ACC_1",
+      "account_type": "Money_Market",
+      "current_balance": 17676.35,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 62101.19,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 90679.35,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 94,
+    "total_volume": 274025.18,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "efe9b8f6-02e7-4fd2-9f7a-98a0d2adc147",
+    "processing_date": "2026-02-03T19:38:32.189189",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "auto_approve",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:38:24.233236+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve",
+      "reviewer_decision": "yes (auto-approved)",
+      "rationale": "Approved by auto_approve - AI classification: Structuring (confidence: 0.95)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.95,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=efe9b8f6-02e7-4fd2-9f7a-98a0d2adc147"
+    }
+  }
+}

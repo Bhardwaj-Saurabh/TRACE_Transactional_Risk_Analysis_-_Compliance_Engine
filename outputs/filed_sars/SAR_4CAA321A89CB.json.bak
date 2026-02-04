@@ -1,0 +1,93 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_4CAA321A89CB",
+    "filing_date": "2026-02-03T11:09:23.556629",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "71f6603b015bffec10f03d1ac6c8ed5d98334a467c49bcaf33cc17c98784d731"
+  },
+  "subject_information": {
+    "customer_name": "Tracy Lewis",
+    "customer_id": "CUST_0053",
+    "date_of_birth": "1966-10-26",
+    "ssn_last_4": "1828",
+    "address": "8016 Nicole Stream Suite 650, Williamsside, ID 48017",
+    "customer_since": "2024-05-11",
+    "risk_rating": "Medium",
+    "occupation": "Nurse, mental health",
+    "annual_income": 131925
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Tracy Lewis (CUST_0053) has engaged in suspicious activity characterized by structuring. Between July 25 and July 31, 2025, she made multiple cash deposits totaling $54,000, specifically $9,238.15, $9,445.01, $9,602.08, $9,716.77, $9,915.61, $9,864.52, and $9,786.92, all just under the $10,000 currency transaction reporting threshold. This pattern suggests an attempt to evade reporting requirements under 31 USC 5324. Additionally, her high average monthly balances and rapid fund movements are inconsistent with her profile as a nurse, raising further suspicion of potential money laundering activities. This filing is made in compliance with 31 CFR 1020.320.",
+    "narrative_word_count": 92,
+    "key_indicators": [
+      "multiple cash deposits just under $10,000",
+      "high average monthly balances"
+    ],
+    "ai_reasoning": "The customer has made multiple cash deposits just under $10,000, specifically $9,238.15, $9,445.01, $9,602.08, $9,716.77, $9,915.61, $9,864.52, and $9,786.92. This pattern suggests an attempt to avoid reporting thresholds. Additionally, the rapid movement of funds and the high average monthly balances in multiple accounts are inconsistent with the customer's profile as a nurse."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative was constructed to clearly identify the customer and describe the suspicious activity pattern of structuring cash deposits just below the reporting threshold. Specific transaction amounts and dates were included to substantiate the suspicion, while regulatory language was utilized to ensure compliance with BSA/AML requirements.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0053_ACC_1",
+      "account_type": "Money_Market",
+      "current_balance": 17676.35,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 62101.19,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0053_ACC_3",
+      "account_type": "Business_Checking",
+      "current_balance": 90679.35,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 94,
+    "total_volume": 274025.18,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "e5940b43-d096-48aa-8ff3-b54e396bbeb9",
+    "processing_date": "2026-02-03T11:09:23.556629",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T11:09:23.556629",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes (backfilled - SAR was previously filed)",
+      "rationale": "BACKFILLED: SAR was filed without complete decision gate record. AI classification: Structuring (confidence: 0.85)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=e5940b43-d096-48aa-8ff3-b54e396bbeb9",
+      "backfilled": true,
+      "backfill_timestamp": "2026-02-03T22:59:37.126865+00:00"
+    }
+  }
+}

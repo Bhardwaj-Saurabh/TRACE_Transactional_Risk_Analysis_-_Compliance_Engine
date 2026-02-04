@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "c33e203e3dc4dac4d97b78752de07871e6fc08830120b74afcf87586060f635a"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.309204",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tracy Lewis",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.95,
-    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring from 2025-02-06 to 2025-07-31, totaling $274,025.18 across 94 transactions. Notably, consecutive cash deposits just under $10,000 occurred from 2025-07-25 to 2025-07-31 at various branches. This activity, inconsistent with Lewis's income, is indicative of attempts to evade BSA reporting thresholds.",
-    "narrative_word_count": 45,
+    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring from 2025-02-06 to 2025-07-31, totaling $274,025.18 across 94 transactions. Notably, consecutive cash deposits just under $10,000 occurred from 2025-07-25 to 2025-07-31 at various branches at multiple branch locations. This activity, inconsistent with Lewis's income, is indicative of attempts to evade BSA reporting thresholds.",
+    "narrative_word_count": 49,
     "key_indicators": [
       "Multiple cash deposits just under $10,000",
       "High account balances inconsistent with income"

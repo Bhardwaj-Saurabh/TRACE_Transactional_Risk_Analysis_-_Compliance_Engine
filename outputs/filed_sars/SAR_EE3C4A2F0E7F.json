@@ -5,7 +5,13 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "7c3a666d6082cec58a078dcf729f4989f3df7a5df245590e5d2950411b7c08d1"
+    "document_checksum": "REPAIRED_20260204_101530",
+    "last_updated": "2026-02-04T10:15:30.000000",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations",
+      "manual_citation_fix_31_USC_5324_to_18_USC_1956"
+    ]
   },
   "subject_information": {
     "customer_name": "Cindy Clayton",
@@ -34,7 +40,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly encapsulates the Five W's, highlighting the customer's suspicious activity, the time period, the total amount involved, the locations, and the reason for suspicion. It also references the BSA reporting thresholds.",

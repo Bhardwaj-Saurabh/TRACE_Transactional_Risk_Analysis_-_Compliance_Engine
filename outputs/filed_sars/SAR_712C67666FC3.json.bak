@@ -1,0 +1,81 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_712C67666FC3",
+    "filing_date": "2026-02-03T22:26:13.048300",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "229633b830d60511ec5d8c4527da2ee3dfc45c0e031700b26e7ce2983ebab9e0",
+    "test_scenario": true,
+    "classification_coverage_test": "Structuring"
+  },
+  "subject_information": {
+    "customer_name": "Jennifer Walsh",
+    "customer_id": "CUST_STRUCT_TEST",
+    "date_of_birth": "1982-07-14",
+    "ssn_last_4": "3892",
+    "address": "445 Commerce Drive, Phoenix, AZ 85001",
+    "customer_since": "2021-01-15",
+    "risk_rating": "Medium",
+    "occupation": "Restaurant Owner",
+    "annual_income": 95000
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.9,
+    "narrative": "Jennifer Walsh (CUST_STRUCT_TEST), a medium-risk restaurant owner, made six cash deposits totaling $58,400 from 2025-07-01 to 2025-07-07 at Branch_Phoenix_Main, Branch_Phoenix_East, and Branch_Phoenix_West. Each deposit was under $10,000, a pattern indicative of structuring to avoid BSA's $10,000 reporting threshold. This suspicious activity, coupled with her cash-intensive business, raises the risk level to high.",
+    "narrative_word_count": 52,
+    "key_indicators": [
+      "Multiple deposits just under $10,000",
+      "Cash-based business owner"
+    ],
+    "ai_reasoning": "Step 1: The customer is a restaurant owner with a medium risk rating. The account is a business checking account with an average monthly balance of $65,000. The customer has made six cash deposits within a week, all under $10,000 but cumulatively exceeding this amount. Step 2: The pattern of deposits is consistent with structuring, a technique used to avoid triggering mandatory reporting requirements for transactions of $10,000 or more. Step 3: This pattern maps to the Bank Secrecy Act (BSA), which requires financial institutions to report cash transactions exceeding $10,000. Structuring transactions to avoid this threshold is a violation of the BSA. Step 4: The risk level is high due to the clear pattern of structuring and the customer's occupation, which could potentially facilitate cash-based structuring. Step 5: The predominant pattern is structuring, leading to this classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's: WHO (Jennifer Walsh), WHAT (structuring via cash deposits), WHEN (2025-07-01 to 2025-07-07), WHERE (Phoenix branches), and WHY (avoiding BSA reporting). It also references the BSA's $10,000 threshold.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_STRUCT_TEST_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 78500.0,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 6,
+    "total_volume": 58400.0,
+    "date_range": {
+      "earliest": "2025-07-01",
+      "latest": "2025-07-07"
+    }
+  },
+  "audit_trail": {
+    "case_id": "7480576e-8cb0-4dba-9bc4-c95418a974c6",
+    "processing_date": "2026-02-03T22:26:13.048300",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "classification_coverage_test",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T22:26:13.048300",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve_coverage_test",
+      "reviewer_decision": "yes (classification coverage test)",
+      "rationale": "Auto-approved for classification coverage testing - Structuring",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.9,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=7480576e-8cb0-4dba-9bc4-c95418a974c6"
+    }
+  }
+}

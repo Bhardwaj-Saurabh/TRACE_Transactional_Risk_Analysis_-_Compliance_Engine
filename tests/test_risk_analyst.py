@@ -64,7 +64,7 @@ class TestRiskAnalystAgent:
 {
     "classification": "Structuring",
     "confidence_score": 0.85,
-    "reasoning": "Multiple transactions just under $10,000 threshold suggest structuring",
+    "reasoning": "Step 1: Customer profile and account data reviewed. Step 2: Multiple transactions just under $10,000 threshold detected. Step 3: Pattern matches BSA structuring regulations. Step 4: High confidence based on clear threshold avoidance. Step 5: Classified as Structuring.",
     "key_indicators": ["threshold avoidance", "repeated amounts", "cash deposits"],
     "risk_level": "High"
 }
@@ -691,20 +691,21 @@ class TestChainOfThoughtEvidence:
             os.remove("test_cot.jsonl")
 
     @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
-    def test_ensure_chain_of_thought_format_method(self):
-        """Test the _ensure_chain_of_thought_format helper method"""
+    def test_validate_chain_of_thought_steps_method(self):
+        """Test the _validate_chain_of_thought_steps validation method"""
         agent = RiskAnalystAgent(Mock(), Mock())
 
-        # Test reasoning that already has steps
+        # Test reasoning that has all 5 steps - should validate successfully
         reasoning_with_steps = "Step 1: Data reviewed. Step 2: Patterns found. Step 3: Mapped to BSA. Step 4: High risk. Step 5: Structuring."
-        result = agent._ensure_chain_of_thought_format(reasoning_with_steps)
-        assert result == reasoning_with_steps
+        assert agent._validate_chain_of_thought_steps(reasoning_with_steps) == True
 
-        # Test reasoning without explicit steps gets formatted
+        # Test reasoning without explicit steps - should fail validation
         reasoning_without_steps = "Multiple cash deposits under threshold detected suggesting structuring."
-        result = agent._ensure_chain_of_thought_format(reasoning_without_steps)
-        assert "Step 1" in result
-        assert "Step 5" in result
+        assert agent._validate_chain_of_thought_steps(reasoning_without_steps) == False
+
+        # Test partial steps - should fail validation
+        partial_steps = "Step 1: Data reviewed. Step 2: Patterns found."
+        assert agent._validate_chain_of_thought_steps(partial_steps) == False
 
     @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
     def test_validate_classification_coverage_method(self):
@@ -1131,3 +1132,338 @@ class TestErrorHandlingAndRecovery:
         # Cleanup
         if os.path.exists("test_complete_fallback.jsonl"):
             os.remove("test_complete_fallback.jsonl")
+
+
+class TestChainOfThoughtValidation:
+    """Test strict Chain-of-Thought step validation"""
+
+    def _create_test_case(self):
+        """Helper to create a test case"""
+        customer = CustomerData(
+            customer_id="CUST_VAL", name="Validation Test",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Val St", customer_since="2020-01-01",
+            risk_rating="Medium"
+        )
+        return CaseData(
+            case_id="CASE_VAL", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_VAL", account_id="ACC_VAL",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=9500.0, description="Test", method="Cash"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "validation"}
+        )
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_validate_chain_of_thought_steps_all_present(self):
+        """Test validation passes when all 5 steps are present"""
+        agent = RiskAnalystAgent(Mock(), Mock())
+
+        valid_reasoning = (
+            "Step 1: Customer data reviewed. "
+            "Step 2: Patterns identified. "
+            "Step 3: Regulatory mapping applied. "
+            "Step 4: Risk quantified. "
+            "Step 5: Classification determined."
+        )
+
+        assert agent._validate_chain_of_thought_steps(valid_reasoning) == True
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_validate_chain_of_thought_steps_missing_steps(self):
+        """Test validation fails when steps are missing"""
+        agent = RiskAnalystAgent(Mock(), Mock())
+
+        # Missing Step 3, 4, and 5
+        incomplete_reasoning = "Step 1: Data reviewed. Step 2: Patterns found."
+        assert agent._validate_chain_of_thought_steps(incomplete_reasoning) == False
+
+        # Missing Step 1
+        incomplete_reasoning2 = "Step 2: Patterns. Step 3: Mapping. Step 4: Risk. Step 5: Done."
+        assert agent._validate_chain_of_thought_steps(incomplete_reasoning2) == False
+
+        # No steps at all
+        no_steps = "This is a general analysis without step markers."
+        assert agent._validate_chain_of_thought_steps(no_steps) == False
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_validation_failure_triggers_regeneration(self):
+        """Test that missing steps trigger regeneration with explicit instructions"""
+        mock_client = Mock()
+
+        # First response missing steps
+        mock_response_1 = Mock()
+        mock_response_1.choices = [Mock()]
+        mock_response_1.choices[0].message.content = '''```json
+{
+    "classification": "Structuring",
+    "confidence_score": 0.85,
+    "reasoning": "Multiple transactions under $10,000 threshold detected suggesting structuring.",
+    "key_indicators": ["threshold_avoidance"],
+    "risk_level": "High"
+}
+```'''
+
+        # Second response with proper steps
+        mock_response_2 = Mock()
+        mock_response_2.choices = [Mock()]
+        mock_response_2.choices[0].message.content = '''```json
+{
+    "classification": "Structuring",
+    "confidence_score": 0.85,
+    "reasoning": "Step 1: Customer data reviewed. Step 2: Multiple cash deposits under $10,000 identified. Step 3: Pattern matches BSA structuring regulations. Step 4: High confidence based on clear threshold avoidance. Step 5: Classified as Structuring.",
+    "key_indicators": ["threshold_avoidance"],
+    "risk_level": "High"
+}
+```'''
+
+        # First call returns invalid, second returns valid
+        mock_client.chat.completions.create.side_effect = [mock_response_1, mock_response_2]
+
+        logger = ExplainabilityLogger("test_regeneration.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger, max_retries=3)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Should succeed after regeneration
+        assert result.classification == "Structuring"
+        assert "Step 1" in result.reasoning
+        assert "Step 5" in result.reasoning
+
+        # Should have called API twice (once failed validation, once succeeded)
+        assert mock_client.chat.completions.create.call_count == 2
+
+        # Should have logged validation failure
+        validation_failures = [e for e in logger.entries if "chain_of_thought_validation_failed" in e.get("action", "")]
+        assert len(validation_failures) >= 1
+
+        if os.path.exists("test_regeneration.jsonl"):
+            os.remove("test_regeneration.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_explicit_step_instructions_format(self):
+        """Test the explicit step instructions prompt format"""
+        agent = RiskAnalystAgent(Mock(), Mock())
+        case = self._create_test_case()
+
+        explicit_prompt = agent._format_case_with_explicit_step_instructions(case)
+
+        # Verify explicit instructions are included
+        assert "CRITICAL REQUIREMENT" in explicit_prompt
+        assert "Step 1:" in explicit_prompt
+        assert "Step 5:" in explicit_prompt
+        assert "ALL FIVE STEPS" in explicit_prompt
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_validation_failure_eventually_uses_fallback(self):
+        """Test that after max retries, validation failure uses fallback"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        # Always returns invalid (no steps)
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Other",
+    "confidence_score": 0.5,
+    "reasoning": "No clear patterns identified.",
+    "key_indicators": ["unclear"],
+    "risk_level": "Medium"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_val_fallback.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger, max_retries=2, enable_fallback=True)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Should return fallback output
+        assert result.classification == "Other"
+        assert "Step 1" in result.reasoning  # Fallback includes steps
+        assert "Step 5" in result.reasoning
+
+        if os.path.exists("test_val_fallback.jsonl"):
+            os.remove("test_val_fallback.jsonl")
+
+
+class TestSystematicCalibration:
+    """Test systematic confidence/risk calibration"""
+
+    def _create_test_case(self, total_amount=10000):
+        """Helper to create a test case with specified transaction amount"""
+        customer = CustomerData(
+            customer_id="CUST_CAL", name="Calibration Test",
+            date_of_birth="1980-01-01", ssn_last_4="1234",
+            address="123 Cal St", customer_since="2020-01-01",
+            risk_rating="Medium", annual_income=50000
+        )
+        return CaseData(
+            case_id="CASE_CAL", customer=customer, accounts=[],
+            transactions=[TransactionData(
+                transaction_id="TXN_CAL", account_id="ACC_CAL",
+                transaction_date="2025-01-01", transaction_type="Cash_Deposit",
+                amount=total_amount, description="Test", method="Cash"
+            )],
+            case_created_at=datetime.now().isoformat(),
+            data_sources={"test": "calibration"}
+        )
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_other_classification_lowers_confidence(self):
+        """Test that 'Other' classification gets lower confidence"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Other",
+    "confidence_score": 0.95,
+    "reasoning": "Step 1: Data reviewed. Step 2: Unclear patterns. Step 3: No clear regulatory match. Step 4: Uncertain. Step 5: Classified as Other.",
+    "key_indicators": ["unclear"],
+    "risk_level": "Medium"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_other_confidence.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Confidence should be capped at 0.65 for "Other"
+        assert result.confidence_score <= 0.65
+        assert "CALIBRATION" in result.reasoning
+        assert "Other" in result.reasoning
+
+        if os.path.exists("test_other_confidence.jsonl"):
+            os.remove("test_other_confidence.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_few_indicators_lowers_confidence(self):
+        """Test that few indicators result in lower confidence"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Structuring",
+    "confidence_score": 0.90,
+    "reasoning": "Step 1: Data reviewed. Step 2: Some patterns detected. Step 3: BSA relevant. Step 4: High risk. Step 5: Structuring.",
+    "key_indicators": ["single_indicator"],
+    "risk_level": "High"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_few_indicators.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Confidence should be capped at 0.6 for <2 indicators
+        assert result.confidence_score <= 0.6
+        assert "limited indicators" in result.reasoning
+
+        if os.path.exists("test_few_indicators.jsonl"):
+            os.remove("test_few_indicators.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_high_volume_increases_risk_floor(self):
+        """Test that high transaction volume prevents Low risk rating"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Structuring",
+    "confidence_score": 0.75,
+    "reasoning": "Step 1: High volume transactions. Step 2: Patterns detected. Step 3: BSA relevant. Step 4: Risk assessed. Step 5: Structuring.",
+    "key_indicators": ["high_volume", "pattern"],
+    "risk_level": "Low"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_high_volume.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger)
+
+        # Create case with $150,000 in transactions
+        case = self._create_test_case(total_amount=150000)
+        result = agent.analyze_case(case)
+
+        # Risk level should be raised to at least Medium for high volume
+        assert result.risk_level != "Low"
+        assert result.risk_level in ["Medium", "High", "Critical"]
+        assert "high volume" in result.reasoning
+
+        if os.path.exists("test_high_volume.jsonl"):
+            os.remove("test_high_volume.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk_Analyst Agent not implemented yet")
+    def test_confidence_aligned_with_risk_level(self):
+        """Test that confidence is aligned with risk level"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        # Critical risk with very low confidence (misaligned)
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Sanctions",
+    "confidence_score": 0.30,
+    "reasoning": "Step 1: Data reviewed. Step 2: Possible sanctions issue. Step 3: OFAC relevant. Step 4: Critical risk. Step 5: Sanctions.",
+    "key_indicators": ["ofac", "sanctions"],
+    "risk_level": "Critical"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_alignment.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Confidence should be raised to align with Critical risk (0.75-1.0 range)
+        assert result.confidence_score >= 0.75
+        assert "confidence raised to Critical minimum" in result.reasoning or "confidence" in result.reasoning
+
+        if os.path.exists("test_alignment.jsonl"):
+            os.remove("test_alignment.jsonl")
+
+    @pytest.mark.skipif(not RISK_ANALYST_IMPLEMENTED, reason="Risk Analyst Agent not implemented yet")
+    def test_calibration_rationale_present(self):
+        """Test that calibration rationale is added to reasoning"""
+        mock_client = Mock()
+        mock_response = Mock()
+        mock_response.choices = [Mock()]
+        mock_response.choices[0].message.content = '''```json
+{
+    "classification": "Money_Laundering",
+    "confidence_score": 0.85,
+    "reasoning": "Step 1: Complex transaction patterns. Step 2: Layering detected. Step 3: BSA AML relevant. Step 4: High risk. Step 5: Money laundering.",
+    "key_indicators": ["layering", "complex_pattern", "shell_company", "offshore"],
+    "risk_level": "High"
+}
+```'''
+        mock_client.chat.completions.create.return_value = mock_response
+
+        logger = ExplainabilityLogger("test_calibration_rationale.jsonl")
+        agent = RiskAnalystAgent(mock_client, logger)
+
+        case = self._create_test_case()
+        result = agent.analyze_case(case)
+
+        # Calibration rationale should be present
+        assert "[CALIBRATION:" in result.reasoning
+        assert "confidence=" in result.reasoning
+        assert "risk_level=" in result.reasoning
+        assert "4+ strong indicators" in result.reasoning  # Has 4 indicators
+
+        if os.path.exists("test_calibration_rationale.jsonl"):
+            os.remove("test_calibration_rationale.jsonl")

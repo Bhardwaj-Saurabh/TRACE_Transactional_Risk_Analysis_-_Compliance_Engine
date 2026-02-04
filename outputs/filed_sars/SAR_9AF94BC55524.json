@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "05277c3ea11b010bbec3c8cbd4e90ec8ebc3e3f1e5a95a833a462542a00b9603",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Money_Laundering"
+    "classification_coverage_test": "Money_Laundering",
+    "last_updated": "2026-02-04T10:12:36.255270",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Diana Morrison",
@@ -37,7 +42,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the suspicious activity, the customer's profile, and the discrepancy between her income and account activity. It also references key indicators and potential money laundering.",

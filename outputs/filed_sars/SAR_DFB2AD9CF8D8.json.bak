@@ -1,0 +1,92 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_DFB2AD9CF8D8",
+    "filing_date": "2026-02-03T19:10:44.459280",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "874a82bcca20be7778ba5d8790a8f9b246d4f0a4743eea67be30e9e881e16264"
+  },
+  "subject_information": {
+    "customer_name": "Elijah Patton",
+    "customer_id": "CUST_0071",
+    "date_of_birth": "1967-05-03",
+    "ssn_last_4": "5040",
+    "address": "937 Derek Avenue Suite 596, Scottchester, GU 85833",
+    "customer_since": "2018-07-08",
+    "risk_rating": "High",
+    "occupation": "Health visitor",
+    "annual_income": 236808
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Elijah Patton (CUST_0071) engaged in suspicious activity consistent with money laundering from 2025-02-06 to 2025-07-31. Totaling $163,147.48 across 68 transactions, the activity involved multiple branches (Downtown_Main, Westside_Plaza, Eastside_Center, Airport_Terminal, Southpark_Ave) and methods (ATM, branch, electronic, mobile). High-risk indicators include high volume and frequency of transactions, multiple accounts with large balances, and a high-risk customer profile. The pattern of large transactions across multiple accounts, ATM withdrawals, and wire transfers may indicate layering, a common money laundering technique.",
+    "narrative_word_count": 76,
+    "key_indicators": [
+      "High-risk customer profile",
+      "High volume and frequency of transactions",
+      "Multiple accounts with large balances"
+    ],
+    "ai_reasoning": "Step 1: The customer profile shows a high-risk rating with an annual income of $236,808. The customer has three accounts, two of which are active with high balances and average monthly transactions. The transaction history shows a high volume of transactions with a total transaction volume of $163,147.48 across 68 transactions. Step 2: The pattern of transactions shows a high frequency of large transactions across multiple accounts. There are also several ATM withdrawals and wire transfers, which could be a method of layering in money laundering. Step 3: The identified patterns map to the money laundering typology under the BSA and USA PATRIOT Act, which requires financial institutions to monitor and report suspicious activity that could indicate money laundering. Step 4: The risk is quantified as high due to the high-risk customer profile, the high volume and frequency of transactions, and the potential for money laundering. Step 5: The predominant pattern is consistent with money laundering, leading to this classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting key details of the suspicious activity, the customer's high-risk profile, and the potential money laundering pattern.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0071_ACC_1",
+      "account_type": "Savings",
+      "current_balance": 81919.0,
+      "status": "Closed"
+    },
+    {
+      "account_id": "CUST_0071_ACC_2",
+      "account_type": "Savings",
+      "current_balance": 4884.31,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0071_ACC_3",
+      "account_type": "Checking",
+      "current_balance": 39350.17,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 68,
+    "total_volume": 163147.47999999998,
+    "date_range": {
+      "earliest": "2025-02-06",
+      "latest": "2025-07-31"
+    }
+  },
+  "audit_trail": {
+    "case_id": "f7ac8f0d-1e1e-4b1f-bd85-fc7356a72a1a",
+    "processing_date": "2026-02-03T19:10:44.459280",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:10:29.241277+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes",
+      "rationale": "Approved by compliance_officer - AI classification: Money_Laundering (confidence: 0.85)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=f7ac8f0d-1e1e-4b1f-bd85-fc7356a72a1a"
+    }
+  }
+}

@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "7c34ebf2fcba0a28094be4f7721a4165a680c6f854b30c5d796bb330d504b38b"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.229078",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tanya Johnston",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Tanya Johnston (CUST_0018), a high-risk customer, engaged in suspicious structuring by making multiple cash deposits totaling $37,535.45 across four transactions from July 22 to July 25, 2025, each under the $10,000 reporting threshold. The deposits were $9,576.59, $9,530.63, $9,274.89, and $9,154.34 at various branches. This pattern suggests an attempt to evade currency transaction reporting requirements (31 USC 5324). The activity is inconsistent with her profile as a therapist, indicating potential illicit activity. This report is filed in compliance with 31 CFR 1020.320 and FinCEN SAR Instructions.",
-    "narrative_word_count": 86,
+    "narrative": "Tanya Johnston (CUST_0018), a high-risk customer, engaged in suspicious structuring by making multiple cash deposits totaling $37,535.45 across four transactions from July 22 to July 25, 2025, each under the $10,000 reporting threshold. The deposits were $9,576.59, $9,530.63, $9,274.89, and $9,154.34 at various branches at multiple branch locations. This pattern suggests an attempt to evade currency transaction reporting requirements (31 USC 5324). The activity is inconsistent with her profile as a therapist, indicating potential illicit activity. This report is filed in compliance with 31 CFR 1020.320 and FinCEN SAR Instructions.",
+    "narrative_word_count": 90,
     "key_indicators": [
       "multiple cash deposits under $10,000",
       "high-risk customer profile"

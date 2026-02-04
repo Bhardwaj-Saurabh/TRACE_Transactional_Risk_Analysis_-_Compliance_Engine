@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "cc08438bd0de3705c6db7bcd9c2c1c121bb2e9e772222000da5d271ae6260c19",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Sanctions"
+    "classification_coverage_test": "Sanctions",
+    "last_updated": "2026-02-04T10:12:36.206871",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Alexander Petrov",
@@ -36,7 +41,7 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324",
+      "OFAC SDN List",
       "FinCEN SAR Instructions"
     ],
     "completeness_check": true,

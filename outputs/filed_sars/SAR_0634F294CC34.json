@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "cc8997b73262ce5ac12445641ce71ab0a17f4d9244a62a113d3b3d9cb5a91d7f"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.162679",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tanya Johnston",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Tanya Johnston (CUST_0018) engaged in structuring, depositing $150,758.53 across 54 transactions from 2025-02-08 to 2025-07-27. Transactions occurred at Branch_Downtown_Main, Branch_Suburban_Center, Branch_University_District, Branch_Westside_Plaza, and Branch_Eastside_Center. Notably, from 2025-07-22 to 2025-07-25, Johnston made four consecutive cash deposits, each under $10,000, at various branches. This activity, indicative of structuring, is suspicious as it appears designed to evade BSA reporting requirements.",
-    "narrative_word_count": 57,
+    "narrative": "Tanya Johnston (CUST_0018) engaged in structuring, depositing $150,758.53 across 54 transactions from 2025-02-08 to 2025-07-27. Transactions occurred at Branch_Downtown_Main, Branch_Suburban_Center, Branch_University_District, Branch_Westside_Plaza, and Branch_Eastside_Center at multiple branch locations. Notably, from 2025-07-22 to 2025-07-25, Johnston made four consecutive cash deposits, each under $10,000, at various branches. This activity, indicative of structuring, is suspicious as it appears designed to evade BSA reporting requirements.",
+    "narrative_word_count": 61,
     "key_indicators": [
       "High-risk customer",
       "Multiple cash deposits under $10,000"

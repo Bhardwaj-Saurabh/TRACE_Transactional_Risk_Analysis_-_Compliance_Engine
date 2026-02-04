@@ -1,0 +1,86 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_D79EC379DFF9",
+    "filing_date": "2026-02-03T19:21:39.834604",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "3813ec4baf386cbc9d5c6d8c09efe91be8efa6ad69cd2ea23dd4a932e33568b9"
+  },
+  "subject_information": {
+    "customer_name": "Tanya Johnston",
+    "customer_id": "CUST_0018",
+    "date_of_birth": "2001-10-15",
+    "ssn_last_4": "7149",
+    "address": "93149 Laura Port, West Amandastad, CA 66818",
+    "customer_since": "2019-10-08",
+    "risk_rating": "High",
+    "occupation": "Therapist, drama",
+    "annual_income": 166876
+  },
+  "suspicious_activity": {
+    "classification": "Structuring",
+    "risk_level": "High",
+    "confidence_score": 0.9,
+    "narrative": "Tanya Johnston (CUST_0018) engaged in structuring from 2025-02-08 to 2025-07-27, depositing $150,758.53 across 54 transactions at various branches. Notably, four consecutive cash deposits under $10,000 were made at Branch_Westside_Plaza, Branch_Downtown_Main, and Branch_Eastside_Center from 2025-07-22 to 2025-07-25. This pattern, designed to evade BSA's $10,000 reporting threshold, coupled with Johnston's high-risk rating, raises suspicion of money laundering.",
+    "narrative_word_count": 55,
+    "key_indicators": [
+      "Multiple cash deposits under $10,000",
+      "High risk rating",
+      "Significant difference between average monthly balance and current balance"
+    ],
+    "ai_reasoning": "Step 1: The customer's profile shows a high risk rating. The customer has two accounts, one of which is closed. The average monthly balance for the Money Market account is significantly higher than the current balance. The customer has made 54 transactions, including several cash deposits. Step 2: The customer has made multiple cash deposits just under $10,000, which is a common structuring pattern to avoid reporting thresholds. Step 3: This pattern aligns with the Bank Secrecy Act (BSA) regulations, which require banks to report cash transactions over $10,000. Structuring transactions to avoid this threshold is a violation of BSA. Step 4: The risk level is high due to the high risk rating of the customer, the structuring pattern, and the violation of BSA regulations. Step 5: The predominant pattern is structuring, which is the final classification."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's structuring activity, the specific dates and locations of suspicious transactions, and the reason for suspicion.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0018_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 29518.74,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0018_ACC_2",
+      "account_type": "Money_Market",
+      "current_balance": 70384.37,
+      "status": "Closed"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 54,
+    "total_volume": 150758.52999999994,
+    "date_range": {
+      "earliest": "2025-02-08",
+      "latest": "2025-07-27"
+    }
+  },
+  "audit_trail": {
+    "case_id": "bc15045c-d655-47f6-9aca-e7d53d281dec",
+    "processing_date": "2026-02-03T19:21:39.834604",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "auto_approve",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T19:21:32.791951+00:00",
+      "decision": "PROCEED",
+      "reviewer_identity": "auto_approve",
+      "reviewer_decision": "yes (auto-approved)",
+      "rationale": "Approved by auto_approve - AI classification: Structuring (confidence: 0.90)",
+      "ai_classification_at_decision": "Structuring",
+      "ai_confidence_at_decision": 0.9,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=bc15045c-d655-47f6-9aca-e7d53d281dec"
+    }
+  }
+}

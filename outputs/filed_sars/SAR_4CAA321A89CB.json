@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "71f6603b015bffec10f03d1ac6c8ed5d98334a467c49bcaf33cc17c98784d731"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.192048",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tracy Lewis",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Tracy Lewis (CUST_0053) has engaged in suspicious activity characterized by structuring. Between July 25 and July 31, 2025, she made multiple cash deposits totaling $54,000, specifically $9,238.15, $9,445.01, $9,602.08, $9,716.77, $9,915.61, $9,864.52, and $9,786.92, all just under the $10,000 currency transaction reporting threshold. This pattern suggests an attempt to evade reporting requirements under 31 USC 5324. Additionally, her high average monthly balances and rapid fund movements are inconsistent with her profile as a nurse, raising further suspicion of potential money laundering activities. This filing is made in compliance with 31 CFR 1020.320.",
-    "narrative_word_count": 92,
+    "narrative": "Tracy Lewis (CUST_0053) has engaged in suspicious activity characterized by structuring. Between July 25 and July 31, 2025, she made multiple cash deposits totaling $54,000, specifically $9,238.15, $9,445.01, $9,602.08, $9,716.77, $9,915.61, $9,864.52, and $9,786.92, all just under the $10,000 currency transaction reporting threshold at multiple branch locations. This pattern suggests an attempt to evade reporting requirements under 31 USC 5324. Additionally, her high average monthly balances and rapid fund movements are inconsistent with her profile as a nurse, raising further suspicion of potential money laundering activities. This filing is made in compliance with 31 CFR 1020.320.",
+    "narrative_word_count": 96,
     "key_indicators": [
       "multiple cash deposits just under $10,000",
       "high average monthly balances"

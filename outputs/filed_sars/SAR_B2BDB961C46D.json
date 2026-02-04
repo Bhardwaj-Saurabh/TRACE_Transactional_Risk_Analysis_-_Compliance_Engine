@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "ad023b64f3d6bd93d26bd4bcdf06ee94ed1c52094bad68fc6bcefd2788ab75dd"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.287237",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tanya Johnston",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.85,
-    "narrative": "Tanya Johnston (CUST_0018) exhibited a pattern of structuring, depositing cash amounts just below the $10,000 reporting threshold. From 2025-07-22 to 2025-07-25, she made consecutive daily deposits of $9,576.59, $9,530.63, $9,274.89, and $9,154.34 at different branches. This activity, coupled with her high-risk rating, suggests an attempt to evade regulatory reporting, violating 31 USC 5324.",
-    "narrative_word_count": 53,
+    "narrative": "Tanya Johnston (CUST_0018) exhibited a pattern of structuring, depositing cash amounts just below the $10,000 reporting threshold. From 2025-07-22 to 2025-07-25, she made consecutive daily deposits of $9,576.59, $9,530.63, $9,274.89, and $9,154.34 at different branches at multiple branch locations. This activity, coupled with her high-risk rating, suggests an attempt to evade regulatory reporting, violating 31 USC 5324.",
+    "narrative_word_count": 57,
     "key_indicators": [
       "Multiple cash deposits under $10,000",
       "Deposits made at different branches",

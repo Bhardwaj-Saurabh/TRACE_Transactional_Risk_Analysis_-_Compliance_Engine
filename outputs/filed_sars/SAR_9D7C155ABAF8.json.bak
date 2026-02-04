@@ -1,0 +1,95 @@
+{
+  "sar_metadata": {
+    "sar_id": "SAR_9D7C155ABAF8",
+    "filing_date": "2026-02-03T12:02:01.671942",
+    "filing_type": "Suspicious Activity Report",
+    "ai_generated": true,
+    "review_status": "human_approved",
+    "document_checksum": "394aa54b9c858d320773fa7609e28489c02be1fbcd35229bda6eeefefd51acde"
+  },
+  "subject_information": {
+    "customer_name": "Jacqueline Rodriguez",
+    "customer_id": "CUST_0111",
+    "date_of_birth": "2001-02-01",
+    "ssn_last_4": "9067",
+    "address": "49331 Lewis Views Apt. 516, Lake Maryshire, DE 59549",
+    "customer_since": "2022-02-27",
+    "risk_rating": "High",
+    "occupation": "Conservation officer, historic buildings",
+    "annual_income": 306379
+  },
+  "suspicious_activity": {
+    "classification": "Money_Laundering",
+    "risk_level": "High",
+    "confidence_score": 0.85,
+    "narrative": "Customer Jacqueline Rodriguez (CUST_0111) exhibited suspicious activity indicative of money laundering. High transaction volume inconsistent with income was observed. On 2025-07-29, a large incoming wire transfer of $76,517.25 was received. This was followed by multiple large outgoing wire transfers on 2025-07-30 and 2025-07-31 totaling $49,517.51. This pattern suggests layering, a money laundering technique.",
+    "narrative_word_count": 53,
+    "key_indicators": [
+      "High transaction volume",
+      "Large incoming wire transfer",
+      "Multiple large outgoing wire transfers"
+    ],
+    "ai_reasoning": "High volume of transactions inconsistent with customer's income. Large incoming wire transfer followed by multiple large outgoing transfers is indicative of layering in money laundering."
+  },
+  "regulatory_compliance": {
+    "citations": [
+      "31 CFR 1020.320",
+      "31 USC 5324",
+      "FinCEN SAR Instructions"
+    ],
+    "completeness_check": true,
+    "narrative_reasoning": "The narrative succinctly identifies the customer, describes the suspicious activity pattern, includes specific transaction amounts and dates, and explains why the activity is suspicious, using proper BSA/AML compliance terminology.",
+    "compliance_status": "approved"
+  },
+  "account_information": [
+    {
+      "account_id": "CUST_0111_ACC_1",
+      "account_type": "Business_Checking",
+      "current_balance": 41311.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_2",
+      "account_type": "Checking",
+      "current_balance": 92858.26,
+      "status": "Active"
+    },
+    {
+      "account_id": "CUST_0111_ACC_3",
+      "account_type": "Savings",
+      "current_balance": 2343.44,
+      "status": "Active"
+    }
+  ],
+  "transaction_summary": {
+    "total_transactions": 121,
+    "total_volume": 386834.91000000015,
+    "date_range": {
+      "earliest": "2025-02-05",
+      "latest": "2025-08-01"
+    }
+  },
+  "audit_trail": {
+    "case_id": "84a3871f-2049-4e1a-a5fa-cb3aa8d474e3",
+    "processing_date": "2026-02-03T12:02:01.671942",
+    "ai_agents_used": [
+      "RiskAnalyst",
+      "ComplianceOfficer"
+    ],
+    "human_reviewer": "compliance_officer",
+    "filing_institution": "TRACE Financial Services",
+    "human_decision_gate": {
+      "decision_timestamp": "2026-02-03T12:02:01.671942",
+      "decision": "PROCEED",
+      "reviewer_identity": "compliance_officer",
+      "reviewer_decision": "yes (backfilled - SAR was previously filed)",
+      "rationale": "BACKFILLED: SAR was filed without complete decision gate record. AI classification: Money_Laundering (confidence: 0.85)",
+      "ai_classification_at_decision": "Money_Laundering",
+      "ai_confidence_at_decision": 0.85,
+      "ai_risk_level_at_decision": "High",
+      "decision_log_reference": "workflow_decisions.jsonl:case_id=84a3871f-2049-4e1a-a5fa-cb3aa8d474e3",
+      "backfilled": true,
+      "backfill_timestamp": "2026-02-03T22:59:37.130768+00:00"
+    }
+  }
+}

@@ -5,9 +5,14 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "97a3c641eda442c260c5cedfcab35b102a5829a360f3dac4a708d1d6896779d5",
+    "document_checksum": "REPAIRED_20260204_101236",
     "test_scenario": true,
-    "classification_coverage_test": "Money_Laundering"
+    "classification_coverage_test": "Money_Laundering",
+    "last_updated": "2026-02-04T10:12:36.209474",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations"
+    ]
   },
   "subject_information": {
     "customer_name": "Robert Chen",
@@ -38,8 +43,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324",
-      "USA PATRIOT Act"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers the Five W's, highlighting the customer's suspicious activity, transaction details, and the reasoning behind the suspicion, while referencing relevant regulations.",

@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "c30a95f838310891e1ecb59d615c76a4dbe142ba39258dd19bde688e76bde47a"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.305159",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tracy Lewis",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.9,
-    "narrative": "Tracy Lewis (CUST_0053) exhibited structuring behavior, with multiple cash deposits just under the $10,000 reporting threshold from 07/25/2025 to 07/31/2025, totaling $67,669.06. This, coupled with high account balances inconsistent with her income, raises suspicion of potential money laundering.",
-    "narrative_word_count": 38,
+    "narrative": "Tracy Lewis (CUST_0053) exhibited structuring behavior, with multiple cash deposits just under the $10,000 reporting threshold from 07/25/2025 to 07/31/2025, totaling $67,669.06. This, coupled with high account balances inconsistent with her income, raises suspicion of potential money laundering. at multiple branch locations. ",
+    "narrative_word_count": 42,
     "key_indicators": [
       "High account balances compared to income",
       "Multiple cash deposits just under $10,000"

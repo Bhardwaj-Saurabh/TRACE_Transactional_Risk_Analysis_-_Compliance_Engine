@@ -5,7 +5,12 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "2bedd996c280b18fc9c7ebafc123feb3a48ee98e1e96a23cf565fc5644326a38"
+    "document_checksum": "REPAIRED_20260204_101236",
+    "last_updated": "2026-02-04T10:12:36.400176",
+    "repair_applied": true,
+    "repairs": [
+      "added_where_element"
+    ]
   },
   "subject_information": {
     "customer_name": "Tracy Lewis",
@@ -22,8 +27,8 @@
     "classification": "Structuring",
     "risk_level": "High",
     "confidence_score": 0.9,
-    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring, depositing $274,025.18 across 94 transactions from 2025-02-06 to 2025-07-31. Notably, seven consecutive cash deposits, each just under the $10,000 reporting threshold, were made at various branches (University District, Southpark Ave, Northgate Mall, Eastside Center, Westside Plaza) from 2025-07-25 to 2025-07-31. This pattern, indicative of structuring, violates BSA regulations and is suspicious given Lewis's medium-risk profile and high average monthly balances.",
-    "narrative_word_count": 66,
+    "narrative": "Tracy Lewis (CUST_0053) engaged in structuring, depositing $274,025.18 across 94 transactions from 2025-02-06 to 2025-07-31. Notably, seven consecutive cash deposits, each just under the $10,000 reporting threshold, were made at various branches (University District, Southpark Ave, Northgate Mall, Eastside Center, Westside Plaza) from 2025-07-25 to 2025-07-31 at multiple branch locations. This pattern, indicative of structuring, violates BSA regulations and is suspicious given Lewis's medium-risk profile and high average monthly balances.",
+    "narrative_word_count": 70,
     "key_indicators": [
       "Multiple cash deposits just under $10,000",
       "High average monthly balances"

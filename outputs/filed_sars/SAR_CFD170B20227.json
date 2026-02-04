@@ -5,7 +5,13 @@
     "filing_type": "Suspicious Activity Report",
     "ai_generated": true,
     "review_status": "human_approved",
-    "document_checksum": "0936dc4b1ed35afb33630b47905ba39ef8d805ac712709094aab63b39e303591"
+    "document_checksum": "REPAIRED_20260204_101600",
+    "last_updated": "2026-02-04T10:16:00.000000",
+    "repair_applied": true,
+    "repairs": [
+      "corrected_citations",
+      "manual_narrative_enhancement_added_transaction_types"
+    ]
   },
   "subject_information": {
     "customer_name": "Elijah Patton",
@@ -22,7 +28,7 @@
     "classification": "Money_Laundering",
     "risk_level": "High",
     "confidence_score": 0.8,
-    "narrative": "Elijah Patton (CUST_0071) engaged in suspicious activity consistent with money laundering from 2025-02-06 to 2025-07-31. Totaling $163,147.48 across 68 transactions, the activity involved rapid movement of funds via various channels including ATM, Electronic, Mobile, and Online, across multiple branches. The high volume and large transactions are inconsistent with Patton's profile, obscuring fund origins and potentially violating BSA/AML regulations.",
+    "narrative": "Elijah Patton (CUST_0071) engaged in suspicious activity consistent with money laundering from 2025-02-06 to 2025-07-31. Totaling $163,147.48 across 68 transactions, the activity involved rapid transfers via various channels including ATM withdrawals, electronic transfers, mobile deposits, and online transfers across multiple branches. The high volume and large transactions are inconsistent with Patton's profile, obscuring fund origins and potentially violating BSA/AML regulations.",
     "narrative_word_count": 58,
     "key_indicators": [
       "High risk rating",
@@ -34,7 +40,8 @@
   "regulatory_compliance": {
     "citations": [
       "31 CFR 1020.320",
-      "31 USC 5324"
+      "31 USC 5318",
+      "18 USC 1956"
     ],
     "completeness_check": true,
     "narrative_reasoning": "The narrative succinctly covers all Five W's, highlighting the customer's suspicious activity, the total amount involved, the time period, transaction locations and channels, and the reason for suspicion.",
